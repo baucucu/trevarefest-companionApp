@@ -1,0 +1,26 @@
+{
+  "cwd": "/Users/Alex/Documents/JSProjects/Trevare Festival/Framework7 - CompanionApp",
+  "type": [
+    "web"
+  ],
+  "name": "Trevare Festival Companion App",
+  "framework": "react",
+  "template": "split-view",
+  "bundler": "webpack",
+  "cssPreProcessor": false,
+  "theming": {
+    "customColor": false,
+    "color": "#007aff",
+    "darkTheme": true,
+    "iconFonts": true,
+    "fillBars": false
+  },
+  "customBuild": false,
+  "webpack": {
+    "developmentSourceMap": true,
+    "productionSourceMap": true,
+    "hashAssets": false,
+    "preserveAssetsPaths": false,
+    "inlineAssets": true
+  }
+}
