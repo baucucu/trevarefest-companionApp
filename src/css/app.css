@@ -29,3 +29,10 @@
   content: '';
   z-index: 6000;
 }
+/* Custom color theme */
+:root {
+  --f7-theme-color: #d67d00;
+  --f7-theme-color-rgb: 214, 125, 0;
+  --f7-theme-color-shade: #ad6500;
+  --f7-theme-color-tint: #ff9500;
+}
