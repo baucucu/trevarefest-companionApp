@@ -29,6 +29,7 @@ import routes from '../js/routes';
 import store from '../js/store';
 
 const MyApp = () => {
+  
   // Login screen demo data
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
@@ -52,8 +53,9 @@ const MyApp = () => {
 
 
     // Call F7 APIs here
+    console.log("url: ",f7.f7route)
   });
-
+  
   return (
     <App { ...f7params } themeDark>
 

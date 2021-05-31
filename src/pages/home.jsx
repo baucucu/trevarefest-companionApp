@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{useState, useEffect} from 'react';
 import {
   Page,
   Navbar,
@@ -21,7 +21,36 @@ import {
   CardFooter,
 } from 'framework7-react';
 
-const HomePage = () => (
+const HomePage = (f7) => { 
+  
+  let [user, setUser] = useState({})
+
+  useEffect(() => {
+    getUser(f7.f7route.query.user)
+  }, [])
+
+  function getUser(recordId) {
+    fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People/${recordId}`,
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+  
+          console.log("user record: ", data)
+          setUser(data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+
+  return(
   <Page name="home">
     {/* Top Navbar */}
     <Navbar large sliding={false}>
@@ -41,7 +70,7 @@ const HomePage = () => (
     </Toolbar> */}
     {/* Page content */}
 
-    <BlockTitle>Your personal calendar</BlockTitle>
+    <BlockTitle>Hi, {user.fields?.["Name"]}, this is your personal calendar</BlockTitle>
 
     {/* <!--
     Additional "timeline-horizontal" class to enable Horizontal timeline
@@ -205,5 +234,5 @@ const HomePage = () => (
       </div>
     </div>
   </Page>
-);
+)}
 export default HomePage;
