@@ -14,12 +14,14 @@ import {Timeline} from '../components/timeline.jsx'
 const HomePage = (f7) => { 
   
   let [user, setUser] = useState({})
+  let [loading, setLoading] = useState(false)
 
   useEffect(() => {
     getUser(f7.f7route.query.user)
   }, [])
 
   function getUser(recordId) {
+    setLoading(true)
     fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People/${recordId}`,
         {
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
@@ -34,6 +36,7 @@ const HomePage = (f7) => {
   
           console.log("user record: ", data)
           setUser(data);
+          setLoading(false)
         })
         .catch((error) => {
           console.log(error);
@@ -43,7 +46,7 @@ const HomePage = (f7) => {
   return(
   <Page name="home">
     {/* Top Navbar */}
-    <Navbar small sliding={false}>
+    {user?.id && <Navbar small sliding={false}>
       {/* <NavLeft>
         <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="left" />
       </NavLeft> */}
@@ -51,23 +54,24 @@ const HomePage = (f7) => {
       <NavRight>
         <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="right" />
       </NavRight>
-    </Navbar>
+    </Navbar>}
     {/* Toolbar */}
-    <Toolbar bottom>
+    {user?.id && <Toolbar bottom>
       <Link>Join an activity</Link>
-      {/* <Link>Right Link</Link> */}
-    </Toolbar>
+    </Toolbar>}
     {/* Page content */}
 
-    <BlockTitle>Hi, {user.fields?.["Name"]}, this is your personal calendar</BlockTitle>
+    {user?.id && <BlockTitle>Hi, {user.fields?.["Name"]}, this is your personal calendar</BlockTitle>}
 
     {/* <!--
     Additional "timeline-horizontal" class to enable Horizontal timeline
     Additional "col-50" to define column width (50%)
     Additional "tablet-20" to define column width for tablets (20%)
     --> */}
-
-    <Timeline user={user}/>
+    
+    {loading && <div>Loading</div>}
+    {user?.id && <Timeline user={user}/>}
+    {user?.id || <div>Not logged in</div>}
   </Page>
 )}
 export default HomePage;
