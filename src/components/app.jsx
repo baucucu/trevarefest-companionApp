@@ -38,8 +38,6 @@ const MyApp = () => {
     name: 'Trevare Festival Companion App', // App name
       theme: 'auto', // Automatic theme detection
 
-
-
       // App store
       store: store,
       // App routes
@@ -60,20 +58,24 @@ const MyApp = () => {
     <App { ...f7params } themeDark>
 
         {/* Left panel with cover effect when hidden */}
-        <Panel left cover themeDark visibleBreakpoint={960}>
+        <Panel right reveal themeDark visibleBreakpoint={960}>
           <View>
             <Page>
-              <Navbar title="Left Panel"/>
-              <BlockTitle>Left View Navigation</BlockTitle>
-              <List>
+              <Navbar title="Menu"/>
+              {/* <BlockTitle>Left View Navigation</BlockTitle> */}
+              {/* <List>
                 <ListItem link="/left-page-1/" title="Left Page 1"/>
                 <ListItem link="/left-page-2/" title="Left Page 2"/>
-              </List>
+              </List> */}
               <BlockTitle>Control Main View</BlockTitle>
               <List>
-                <ListItem link="/about/" view=".view-main" panelClose title="About"/>
-                <ListItem link="/form/" view=".view-main" panelClose title="Form"/>
-                <ListItem link="#" view=".view-main" back panelClose title="Back in history"/>
+                <ListItem link="/flights/" view=".view-main" panelClose title="Flights"/>
+                <ListItem link="/shuttles/" view=".view-main" panelClose title="Shuttles"/>
+                <ListItem link="/people/" view=".view-main" panelClose title="People"/>
+                <ListItem link="/activities/" view=".view-main" panelClose title="Activities"/>
+                {/* <ListItem link="/about/" view=".view-main" panelClose title="About"/> */}
+                {/* <ListItem link="/form/" view=".view-main" panelClose title="Form"/> */}
+                {/* <ListItem link="#" view=".view-main" back panelClose title="Back in history"/> */}
               </List>
             </Page>
           </View>
@@ -81,14 +83,14 @@ const MyApp = () => {
 
 
         {/* Right panel with reveal effect*/}
-        <Panel right reveal themeDark>
+        {/* <Panel right reveal themeDark>
           <View>
             <Page>
               <Navbar title="Right Panel"/>
               <Block>Right panel content goes here</Block>
             </Page>
           </View>
-        </Panel>
+        </Panel> */}
 
 
         {/* Your main view, should have "view-main" class */}

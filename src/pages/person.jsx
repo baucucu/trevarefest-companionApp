@@ -21,24 +21,11 @@ import {
   CardFooter,
 } from 'framework7-react';
 
-const HomePage = () => (
-  <Page name="home">
+const PersonPage = () => (
+  <Page name="person">
     {/* Top Navbar */}
-    <Navbar large sliding={false}>
-      {/* <NavLeft>
-        <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="left" />
-      </NavLeft> */}
-      <NavTitle sliding>Trevare Festival</NavTitle>
-      <NavRight>
-        <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="right" />
-      </NavRight>
-      <NavTitleLarge>Trevare Festival</NavTitleLarge>
-    </Navbar>
-    {/* Toolbar */}
-    {/* <Toolbar bottom>
-      <Link>Left Link</Link>
-      <Link>Right Link</Link>
-    </Toolbar> */}
+    <Navbar title="Person Name Timeline" backLink="Back" />
+    
     {/* Page content */}
 
     <BlockTitle>Your personal calendar</BlockTitle>
@@ -56,13 +43,6 @@ const HomePage = () => (
         <div className="timeline-item-content">
           <Card className="demo-facebook-card">
               <CardHeader className="no-border">
-                {/* <div className="demo-facebook-avatar">
-                  <img
-                    src="https://cdn.framework7.io/placeholder/people-68x68-1.jpg"
-                    width="34"
-                    height="34"
-                  />
-                </div> */}
                 <div className="demo-facebook-name">Event name</div>
                 <div className="demo-facebook-date">3:47 PM</div>
               </CardHeader>
@@ -76,13 +56,7 @@ const HomePage = () => (
             </Card>
             <Card className="demo-facebook-card">
               <CardHeader className="no-border">
-                {/* <div className="demo-facebook-avatar">
-                  <img
-                    src="https://cdn.framework7.io/placeholder/people-68x68-1.jpg"
-                    width="34"
-                    height="34"
-                  />
-                </div> */}
+                
                 <div className="demo-facebook-name">Event name</div>
                 <div className="demo-facebook-date">3:47 PM</div>
               </CardHeader>
@@ -96,13 +70,7 @@ const HomePage = () => (
             </Card>
             <Card className="demo-facebook-card">
               <CardHeader className="no-border">
-                {/* <div className="demo-facebook-avatar">
-                  <img
-                    src="https://cdn.framework7.io/placeholder/people-68x68-1.jpg"
-                    width="34"
-                    height="34"
-                  />
-                </div> */}
+                
                 <div className="demo-facebook-name">Event name</div>
                 <div className="demo-facebook-date">3:47 PM</div>
               </CardHeader>
@@ -116,13 +84,7 @@ const HomePage = () => (
             </Card>
             <Card className="demo-facebook-card">
               <CardHeader className="no-border">
-                {/* <div className="demo-facebook-avatar">
-                  <img
-                    src="https://cdn.framework7.io/placeholder/people-68x68-1.jpg"
-                    width="34"
-                    height="34"
-                  />
-                </div> */}
+                
                 <div className="demo-facebook-name">Event name</div>
                 <div className="demo-facebook-date">3:47 PM</div>
               </CardHeader>
@@ -142,13 +104,7 @@ const HomePage = () => (
         <div className="timeline-item-content">
           <Card className="demo-facebook-card">
             <CardHeader className="no-border">
-              {/* <div className="demo-facebook-avatar">
-                <img
-                  src="https://cdn.framework7.io/placeholder/people-68x68-1.jpg"
-                  width="34"
-                  height="34"
-                />
-              </div> */}
+              
               <div className="demo-facebook-name">Event name</div>
               <div className="demo-facebook-date">3:47 PM</div>
             </CardHeader>
@@ -177,13 +133,7 @@ const HomePage = () => (
         <div className="timeline-item-content">
           <Card className="demo-facebook-card">
               <CardHeader className="no-border">
-                {/* <div className="demo-facebook-avatar">
-                  <img
-                    src="https://cdn.framework7.io/placeholder/people-68x68-1.jpg"
-                    width="34"
-                    height="34"
-                  />
-                </div> */}
+                
                 <div className="demo-facebook-name">Event name</div>
                 <div className="demo-facebook-date">3:47 PM</div>
               </CardHeader>
@@ -206,4 +156,4 @@ const HomePage = () => (
     </div>
   </Page>
 );
-export default HomePage;
+export default PersonPage;
