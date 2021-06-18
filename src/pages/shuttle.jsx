@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar,Button, ListGroup, List, ListItem,ListInput} from 'framework7-react';
+import { Page, Navbar,Button, ListGroup, List, ListItem,ListInput, Icon,} from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 var isBetween = require('dayjs/plugin/isBetween')
@@ -11,9 +11,21 @@ const ShuttlePage = () => {
 
   console.log("datejs example: ", dayjs('2021-08-01'))
 
-  let [shuttle, setShuttle] = useState([])
+  let [shuttle, setShuttle] = useState({})
+  let [cars, setCars] = useState([])
+  let [drivers, setDrivers] = useState([])
+  let [passengers, setPassengers] = useState([])
   
   useEffect(() => {
+    getCars()
+  }, []);
+
+  useEffect(() => {
+    getDrivers()
+  }, []);
+
+  useEffect(() => {
+    getPassengers()
   }, []);
 
   return (
@@ -25,7 +37,6 @@ const ShuttlePage = () => {
               <ListInput
                 label="Location"
                 type="select"
-                // defaultValue="Male"
                 placeholder="Please choose..."
               >
                 {/* <Icon icon="demo-list-icon" slot="media"/> */}
@@ -37,12 +48,14 @@ const ShuttlePage = () => {
                 label="Departure time"
                 type="datepicker"
                 defaultValue="2021-08-01"
+                
                 placeholder="Please choose..."
                 calendarParams={{
                   minDate:"2021-07-31",
                   maxDate:"2021-08-06",
                   yearSelector: false,
                   timePicker: true,
+                  dateFormat:"d M HH::mm",
                   events: [{
                     from: new Date("2021-07-31"),
                     to: new Date("2021-08-06"),
@@ -50,7 +63,7 @@ const ShuttlePage = () => {
                   }],
                 }}
               >
-                {/* <Icon icon="demo-list-icon"  slot="media"/> */}
+                {/* <Icon icon="clock"  slot="media" color="#fffff"/> */}
               </ListInput>
             </ListGroup>
 
@@ -78,6 +91,7 @@ const ShuttlePage = () => {
                   maxDate:"2021-08-06",
                   yearSelector: false,
                   timePicker: true,
+                  dateFormat:"d M HH::mm",
                   events: [{
                     from: new Date("2021-07-31"),
                     to: new Date("2021-08-06"),
@@ -154,14 +168,14 @@ const ShuttlePage = () => {
               >
                 <select name="person" multiple defaultValue={[]}>
                   <optgroup label="Flight: ABC123 (17:00)">
-                    <option value="John Doe">John Doe</option>
-                    <option value="Jane Doe">Jane Doe</option>
+                    <option value="John Doe - ABC123">John Doe</option>
+                    <option value="Jane Doe- ABC123">Jane Doe</option>
                   </optgroup>
                   <optgroup label="Flight: XYZ987 (17:35)">
-                    <option value="John Fonda">John Fonda</option>
-                    <option value="Miriam Maple">Miriam Maple</option>
-                    <option value="Alex Raduca">Alex Raduca</option>
-                    <option value="Boris Johnson">Boris Johnson</option>
+                    <option value="John Fonda - XYZ987">John Fonda</option>
+                    <option value="Miriam Maple - XYZ987">Miriam Maple</option>
+                    <option value="Alex Raduca - XYZ987">Alex Raduca</option>
+                    <option value="Boris Johnson - XYZ987">Boris Johnson</option>
                   </optgroup>
                 </select>
               </ListItem>
@@ -172,6 +186,11 @@ const ShuttlePage = () => {
       
     </Page>
   );
+
+  function getCars() {}
+  function getDrivers() {}
+  function getPassengers() {}
+  function getShuttle() {}
 
 }
 export default ShuttlePage;
