@@ -1,4 +1,5 @@
 import React,{useState, useEffect} from 'react';
+import store from '../js/store.js';
 import {
   Page,
   Navbar,
@@ -17,7 +18,8 @@ const HomePage = (f7) => {
   let [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    getUser(f7.f7route.query.user)
+    console.log("user id is in store? ", store.getters.user.value?.id)
+    if(store.getters.user.value?.id) { setUser(store.getters.user.value)} else {getUser(f7.f7route.query.user)}
   }, [])
 
   function getUser(recordId) {
@@ -36,6 +38,8 @@ const HomePage = (f7) => {
   
           console.log("user record: ", data)
           setUser(data);
+          // call 'getUsers' actions
+          store.dispatch('setUser', data)
           setLoading(false)
         })
         .catch((error) => {
@@ -46,7 +50,7 @@ const HomePage = (f7) => {
   return(
   <Page name="home">
     {/* Top Navbar */}
-    {user?.id && <Navbar small sliding={false}>
+    {user?.id && <Navbar /* small */ sliding={true}>
       {/* <NavLeft>
         <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="left" />
       </NavLeft> */}
@@ -70,8 +74,8 @@ const HomePage = (f7) => {
     --> */}
     
     {loading && <div>Loading</div>}
-    {user?.id && <Timeline user={user}/>}
-    {user?.id || <div>Not logged in</div>}
+    {user?.id && <Timeline userId={f7.f7route.query.user}/>}
+    {!loading || user?.id || <div>Not logged in</div>}
   </Page>
 )}
 export default HomePage;

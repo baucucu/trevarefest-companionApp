@@ -6,6 +6,7 @@ import ShuttlesPage from '../pages/shuttles.jsx'
 import ShuttlePage from '../pages/shuttle.jsx'
 import PeoplePage from '../pages/people.jsx'
 import PersonPage from '../pages/person.jsx'
+import PassengerPage from '../pages/passenger.jsx'
 import ActivitiesPage from '../pages/activities.jsx'
 import AboutPage from '../pages/about.jsx';
 import FormPage from '../pages/form.jsx';
@@ -32,6 +33,13 @@ var routes = [
   {
     path: '/shuttles/',
     component: ShuttlesPage,
+    options: {
+      clearPreviousHistory: true
+    }
+  },
+  {
+    path: '/shuttles/new',
+    component: ShuttlePage,
   },
   {
     path: '/shuttles/:shuttleId',
@@ -44,6 +52,10 @@ var routes = [
   {
     path: '/people/:personId',
     component: PersonPage,
+  },
+  {
+    path: '/passenger/',
+    component: PassengerPage,
   },
   {
     path: '/activities/',

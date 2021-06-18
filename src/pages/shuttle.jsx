@@ -1,11 +1,15 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Block, BlockTitle, List, ListItem, Chip, Icon, Card, CardContent, CardHeader, Link } from 'framework7-react';
+import { Page, Navbar,Button, ListGroup, List, ListItem,ListInput} from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
+var isBetween = require('dayjs/plugin/isBetween')
 dayjs.extend(utc)
+dayjs.extend(isBetween)
 
 
 const ShuttlePage = () => {
+
+  console.log("datejs example: ", dayjs('2021-08-01'))
 
   let [shuttle, setShuttle] = useState([])
   
@@ -15,11 +19,159 @@ const ShuttlePage = () => {
   return (
     <Page>
       <Navbar title="Shuttle" backLink="Back" />
-      <BlockTitle>Shuttle</BlockTitle>
+          <List noHairlinesMd form>
+            <ListGroup>
+              <ListItem title="FROM" groupTitle></ListItem>
+              <ListInput
+                label="Location"
+                type="select"
+                // defaultValue="Male"
+                placeholder="Please choose..."
+              >
+                {/* <Icon icon="demo-list-icon" slot="media"/> */}
+                <option value="Airport">Airport</option>
+                <option value="Trevare">Trevare</option>
+                <option value="Svolvær Sentrum">Svolvær Sentrum</option>
+              </ListInput>
+              <ListInput
+                label="Departure time"
+                type="datepicker"
+                defaultValue="2021-08-01"
+                placeholder="Please choose..."
+                calendarParams={{
+                  minDate:"2021-07-31",
+                  maxDate:"2021-08-06",
+                  yearSelector: false,
+                  timePicker: true,
+                  events: [{
+                    from: new Date("2021-07-31"),
+                    to: new Date("2021-08-06"),
+                    color: "#4caf50"
+                  }],
+                }}
+              >
+                {/* <Icon icon="demo-list-icon"  slot="media"/> */}
+              </ListInput>
+            </ListGroup>
+
+            <ListGroup>
+              <ListItem title="TO" groupTitle></ListItem>
+              <ListInput
+                label="Location"
+                type="select"
+                defaultValue={false}
+                placeholder="Please choose..."
+              >
+                {/* <Icon icon="demo-list-icon" slot="media"/> */}
+                <option value="Airport">Airport</option>
+                <option value="Trevare">Trevare</option>
+                <option value="Svolvær Sentrum">Svolvær Sentrum</option>
+              </ListInput>
+              
+              <ListInput
+                label="Departure time"
+                type="datepicker"
+                defaultValue="2021-08-01"
+                placeholder="Please choose..."
+                calendarParams={{
+                  minDate:"2021-07-31",
+                  maxDate:"2021-08-06",
+                  yearSelector: false,
+                  timePicker: true,
+                  events: [{
+                    from: new Date("2021-07-31"),
+                    to: new Date("2021-08-06"),
+                    color: "#4caf50"
+                  }],
+                }}
+              >
+                {/* <Icon icon="demo-list-icon"  slot="media"/> */}
+              </ListInput>
+            </ListGroup>
+
+            <ListGroup>
+              <ListItem title="VEHICLE" groupTitle></ListItem>
+              <ListItem
+                title="Cars list"
+                smartSelect
+                smartSelectParams={{
+                  openIn: 'popup',
+                  searchbar: true,
+                  searchbarPlaceholder: 'Search drivers',
+                }}
+              >
+                <select name="person" multiple defaultValue={[]}>
+                  <optgroup label="AVAILABLE">
+                    <option value="John Doe">ACB123</option>
+                    <option value="Jane Doe">XHD332</option>
+                  </optgroup>
+                  <optgroup label="BUSY">
+                    <option value="John Fonda">JHS991</option>
+                    <option value="Miriam Maple">USL122</option>
+                    <option value="Alex Raduca">9J8SS0</option>
+                    <option value="Boris Johnson">GDF812</option>
+                  </optgroup>
+                </select>
+              </ListItem>
+              
+            </ListGroup>
+            <ListGroup>
+              <ListItem title="DRIVER" groupTitle></ListItem>
+              <ListItem
+                title="Drivers list"
+                smartSelect
+                smartSelectParams={{
+                  openIn: 'popup',
+                  searchbar: true,
+                  searchbarPlaceholder: 'Search drivers',
+                }}
+              >
+                <select name="person" multiple defaultValue={[]}>
+                  <optgroup label="AVAILABLE">
+                    <option value="John Doe">John Doe</option>
+                    <option value="Jane Doe">Jane Doe</option>
+                  </optgroup>
+                  <optgroup label="BUSY">
+                    <option value="John Fonda">John Fonda</option>
+                    <option value="Miriam Maple">Miriam Maple</option>
+                    <option value="Alex Raduca">Alex Raduca</option>
+                    <option value="Boris Johnson">Boris Johnson</option>
+                  </optgroup>
+                </select>
+              </ListItem>
+              
+            </ListGroup>
+            <ListGroup>
+              <ListItem title="PASSENGERS" groupTitle></ListItem>
+              <ListItem
+                title="People list"
+                smartSelect
+                smartSelectParams={{
+                  openIn: 'popup',
+                  searchbar: true,
+                  searchbarPlaceholder: 'Search people',
+                }}
+              >
+                <select name="person" multiple defaultValue={[]}>
+                  <optgroup label="Flight: ABC123 (17:00)">
+                    <option value="John Doe">John Doe</option>
+                    <option value="Jane Doe">Jane Doe</option>
+                  </optgroup>
+                  <optgroup label="Flight: XYZ987 (17:35)">
+                    <option value="John Fonda">John Fonda</option>
+                    <option value="Miriam Maple">Miriam Maple</option>
+                    <option value="Alex Raduca">Alex Raduca</option>
+                    <option value="Boris Johnson">Boris Johnson</option>
+                  </optgroup>
+                </select>
+              </ListItem>
+              
+            </ListGroup>
+            <Button fill>Save shuttle information</Button>
+          </List>
       
     </Page>
   );
 
 }
 export default ShuttlePage;
-

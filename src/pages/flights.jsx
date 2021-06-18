@@ -7,7 +7,7 @@ dayjs.extend(utc)
 
 const FlightsPage = ({ f7router }) => {
   function getFlights() {
-    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20Transportation",
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbleaxo1OqwVqJwBk",
         {
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
           headers: {
@@ -34,11 +34,10 @@ const FlightsPage = ({ f7router }) => {
 
   return (
     <Page>
-      <Navbar title="Flights" backLink="Back" />
+      <Navbar title="Flights"/>
       <BlockTitle>Arivals</BlockTitle>
       <List mediaList>
         {flights.sort((a, b) => (dayjs(a.fields.Time).isAfter(dayjs(b.fields.Time)) ? 1 : -1)).filter(flight => flight.fields["Type"] === "Arrival").map((flight,id) => {
-          let time = new Date(flight.fields.Time).toLocaleString()
           let formattedTime = dayjs.utc(flight.fields.Time).format("D MMM - HH:mm").toString()
           return (
             <ListItem

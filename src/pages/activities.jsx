@@ -24,7 +24,7 @@ import {
 const ActivitiesPage = () => (
   <Page name="activities">
     {/* Top Navbar */}
-    <Navbar title="Activities" backLink="Back" />
+    <Navbar title="Activities"/>
     
     {/* Page content */}
 

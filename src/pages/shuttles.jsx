@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Block, BlockTitle, List, ListItem, Chip, Icon, Card, CardContent, CardHeader, Link } from 'framework7-react';
+import { Page, Navbar, Toolbar, Link, List, ListItem, Chip } from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -34,7 +34,11 @@ const ShuttlesPage = ({ f7router }) => {
 
   return (
     <Page>
-      <Navbar title="Shuttles" backLink="Back" />
+      <Navbar title="Shuttles"/>
+      <Toolbar bottom>
+        <Link href="/shuttles/new">Request a new shuttle</Link>
+        <Link href="/passenger/">Book a passenger</Link>
+      </Toolbar>
       <List mediaList>
         {shuttles.sort((a, b) => (dayjs(a.fields["Departure Time"]).isAfter(dayjs(b.fields["Departure Time"])) ? 1 : -1)).map((shuttle,id) => {
           let formattedTime = dayjs.utc(shuttle.fields["Departure Time"]).format("D MMM - HH:mm").toString()

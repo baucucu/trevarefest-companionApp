@@ -3,6 +3,7 @@ import React, { useState, useEffect } from 'react';
 import {
   f7,
   f7ready,
+  useStore,
   App,
   Panel,
   Views,
@@ -49,6 +50,11 @@ const MyApp = () => {
       f7.loginScreen.close();
     });
   }
+
+  const user = store.getters.user
+
+  console.log('app.js user: ',user.value.id)
+
   f7ready(() => {
 
 
@@ -71,6 +77,7 @@ const MyApp = () => {
               </List> */}
               <BlockTitle>Control Main View</BlockTitle>
               <List>
+                <ListItem link={`/?user=${user.value.id}`} view=".view-main" panelClose title="My Festival Agenda"/>
                 <ListItem link="/flights/" view=".view-main" panelClose title="Flights"/>
                 <ListItem link="/shuttles/" view=".view-main" panelClose title="Shuttles"/>
                 <ListItem link="/people/" view=".view-main" panelClose title="People"/>
