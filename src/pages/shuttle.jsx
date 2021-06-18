@@ -97,12 +97,12 @@ const ShuttlePage = () => {
                 smartSelectParams={{
                   openIn: 'popup',
                   searchbar: true,
-                  searchbarPlaceholder: 'Search drivers',
+                  searchbarPlaceholder: 'Search car',
                 }}
               >
-                <select name="person" multiple defaultValue={[]}>
+                <select name="person" defaultValue={[]}>
                   <optgroup label="AVAILABLE">
-                    <option value="John Doe">ACB123</option>
+                    <option value="JACB123">ACB123</option>
                     <option value="Jane Doe">XHD332</option>
                   </optgroup>
                   <optgroup label="BUSY">
@@ -123,10 +123,10 @@ const ShuttlePage = () => {
                 smartSelectParams={{
                   openIn: 'popup',
                   searchbar: true,
-                  searchbarPlaceholder: 'Search drivers',
+                  searchbarPlaceholder: 'Search driver',
                 }}
               >
-                <select name="person" multiple defaultValue={[]}>
+                <select name="person" defaultValue={[]}>
                   <optgroup label="AVAILABLE">
                     <option value="John Doe">John Doe</option>
                     <option value="Jane Doe">Jane Doe</option>
