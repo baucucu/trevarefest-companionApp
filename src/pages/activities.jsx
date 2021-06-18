@@ -24,7 +24,11 @@ import {
 const ActivitiesPage = () => (
   <Page name="activities">
     {/* Top Navbar */}
-    <Navbar title="Activities"/>
+    <Navbar title="Activities">
+      <NavRight>
+        <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="right" />
+      </NavRight>
+    </Navbar>
     
     {/* Page content */}
 

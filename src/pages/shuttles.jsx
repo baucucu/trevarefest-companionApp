@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Toolbar, Link, List, ListItem, Chip } from 'framework7-react';
+import { Page, Navbar, Toolbar, Link, List, ListItem, Chip, NavRight, } from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -34,7 +34,11 @@ const ShuttlesPage = ({ f7router }) => {
 
   return (
     <Page>
-      <Navbar title="Shuttles"/>
+      <Navbar title="Shuttles">
+        <NavRight>
+          <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="right" />
+        </NavRight>
+      </Navbar>
       <Toolbar bottom>
         <Link href="/shuttles/new">Request a new shuttle</Link>
         <Link href="/passenger/">Book a passenger</Link>

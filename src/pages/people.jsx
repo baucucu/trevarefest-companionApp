@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Subnavbar,Searchbar, theme, List, ListItem, Chip } from 'framework7-react';
+import { Page, Navbar, Subnavbar,NavRight,Link, Searchbar, theme, List, ListItem, Chip } from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -46,6 +46,9 @@ const PeoplePage = ({ f7router }) => {
             disableButton={!theme.aurora}
           ></Searchbar>
         </Subnavbar>
+        <NavRight>
+          <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="right" />
+        </NavRight>
       </Navbar>
       <List className="searchbar-not-found">
         <ListItem title="Nothing found"></ListItem>

@@ -1,9 +1,8 @@
 
 import HomePage from '../pages/home.jsx';
-import FlightsPage from '../pages/flights.jsx'
-import FlightPage from '../pages/flight.jsx'
-import ShuttlesPage from '../pages/shuttles.jsx'
-import ShuttlePage from '../pages/shuttle.jsx'
+import TransportationPage from '../pages/transportation.jsx'
+import TransportationDetailsPage from '../pages/transportationDetails.jsx'
+import TransportationRequestPage from '../pages/transportationRequest.jsx'
 import PeoplePage from '../pages/people.jsx'
 import PersonPage from '../pages/person.jsx'
 import PassengerPage from '../pages/passenger.jsx'
@@ -23,27 +22,16 @@ var routes = [
     component: HomePage,
   },
   {
-    path: '/flights/',
-    component: FlightsPage,
+    path: '/transportation/',
+    component: TransportationPage,
   },
   {
-    path: '/flights/:flightId',
-    component: FlightPage,
+    path: '/transportation/:transportationId',
+    component: TransportationDetailsPage,
   },
   {
-    path: '/shuttles/',
-    component: ShuttlesPage,
-    options: {
-      clearPreviousHistory: true
-    }
-  },
-  {
-    path: '/shuttles/new',
-    component: ShuttlePage,
-  },
-  {
-    path: '/shuttles/:shuttleId',
-    component: ShuttlePage,
+    path: '/transportationRequest/',
+    component: TransportationRequestPage,
   },
   {
     path: '/people/',

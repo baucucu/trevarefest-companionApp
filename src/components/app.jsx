@@ -66,7 +66,7 @@ const MyApp = () => {
     <App { ...f7params } themeDark>
 
         {/* Left panel with cover effect when hidden */}
-        <Panel right reveal themeDark visibleBreakpoint={960}>
+        <Panel right  themeDark >
           <View>
             <Page>
               <Navbar title="Menu"/>
@@ -75,11 +75,11 @@ const MyApp = () => {
                 <ListItem link="/left-page-1/" title="Left Page 1"/>
                 <ListItem link="/left-page-2/" title="Left Page 2"/>
               </List> */}
-              <BlockTitle>Control Main View</BlockTitle>
+              {/* <BlockTitle>Menu</BlockTitle> */}
               <List>
                 <ListItem link={`/?user=${user.value.id}`} view=".view-main" panelClose title="My Festival Agenda"/>
-                <ListItem link="/flights/" view=".view-main" panelClose title="Flights"/>
-                <ListItem link="/shuttles/" view=".view-main" panelClose title="Shuttles"/>
+                <ListItem link="/transportation/" view=".view-main" panelClose title="Transportation"/>
+                {/* <ListItem link="/shuttles/" view=".view-main" panelClose title="Shuttles"/> */}
                 <ListItem link="/people/" view=".view-main" panelClose title="People"/>
                 <ListItem link="/activities/" view=".view-main" panelClose title="Activities"/>
                 {/* <ListItem link="/about/" view=".view-main" panelClose title="About"/> */}
