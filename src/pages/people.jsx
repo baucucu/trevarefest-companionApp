@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Subnavbar,NavRight,Link, Searchbar, theme, List, ListItem, Chip } from 'framework7-react';
+import { Page, Navbar, Subnavbar,NavRight,Link, Searchbar, theme, List, ListItem, Chip, Badge, Icon } from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -47,7 +47,11 @@ const PeoplePage = ({ f7router }) => {
           ></Searchbar>
         </Subnavbar>
         <NavRight>
-          <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="right" />
+          <Link iconOnly panelOpen="right">
+            <Icon ios="f7:person_circle_fill" aurora="f7:person_circle_fill" md="material:person" >
+              <Badge color="blue">5</Badge>
+            </Icon>
+          </Link>
         </NavRight>
       </Navbar>
       <List className="searchbar-not-found">

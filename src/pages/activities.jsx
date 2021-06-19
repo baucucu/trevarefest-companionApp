@@ -2,8 +2,8 @@ import React from 'react';
 import {
   Page,
   Navbar,
-  NavLeft,
-  NavTitle,
+  Icon,
+  Badge,
   NavTitleLarge,
   NavRight,
   Link,
@@ -26,7 +26,11 @@ const ActivitiesPage = () => (
     {/* Top Navbar */}
     <Navbar title="Activities">
       <NavRight>
-        <Link iconIos="f7:menu" iconAurora="f7:menu" iconMd="material:menu" panelOpen="right" />
+        <Link iconOnly panelOpen="right">
+          <Icon ios="f7:person_circle_fill" aurora="f7:person_circle_fill" md="material:person" >
+            <Badge color="blue">5</Badge>
+          </Icon>
+        </Link>
       </NavRight>
     </Navbar>
     

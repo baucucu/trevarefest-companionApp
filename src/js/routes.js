@@ -3,6 +3,7 @@ import HomePage from '../pages/home.jsx';
 import TransportationPage from '../pages/transportation.jsx'
 import TransportationDetailsPage from '../pages/transportationDetails.jsx'
 import TransportationRequestPage from '../pages/transportationRequest.jsx'
+import TransportationPendingPage from '../pages/transportationPending.jsx'
 import PeoplePage from '../pages/people.jsx'
 import PersonPage from '../pages/person.jsx'
 import PassengerPage from '../pages/passenger.jsx'
@@ -26,12 +27,16 @@ var routes = [
     component: TransportationPage,
   },
   {
-    path: '/transportation/:transportationId',
-    component: TransportationDetailsPage,
+    path: '/transportation/pending',
+    component: TransportationPendingPage,
   },
   {
-    path: '/transportationRequest/',
+    path: '/transportation/request',
     component: TransportationRequestPage,
+  },
+  {
+    path: '/transportation/:transportationId',
+    component: TransportationDetailsPage,
   },
   {
     path: '/people/',

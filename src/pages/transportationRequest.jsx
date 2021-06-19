@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar,Button, ListGroup, List, ListItem,ListInput, Icon,} from 'framework7-react';
+import { Page, Navbar,Button, ListGroup, List, ListItem,ListInput} from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 var isBetween = require('dayjs/plugin/isBetween')
@@ -11,19 +11,9 @@ const TransportationRequestPage = () => {
 
   console.log("datejs example: ", dayjs('2021-08-01'))
 
-  let [shuttle, setShuttle] = useState({})
-  let [cars, setCars] = useState([])
-  let [drivers, setDrivers] = useState([])
+  let [transportation, setTransportation] = useState({})
   let [passengers, setPassengers] = useState([])
   
-  useEffect(() => {
-    getCars()
-  }, []);
-
-  useEffect(() => {
-    getDrivers()
-  }, []);
-
   useEffect(() => {
     getPassengers()
   }, []);
@@ -114,10 +104,7 @@ const TransportationRequestPage = () => {
     </Page>
   );
 
-  function getCars() {}
-  function getDrivers() {}
+  
   function getPassengers() {}
-  function getShuttle() {}
-
 }
 export default TransportationRequestPage;
