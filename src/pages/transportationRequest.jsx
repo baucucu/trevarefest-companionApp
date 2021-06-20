@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar,Button, ListGroup, List, ListItem,ListInput} from 'framework7-react';
+import { Page, Navbar,Button, ListGroup, List, ListItem,ListInput, f7, f7ready} from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 var isBetween = require('dayjs/plugin/isBetween')
@@ -9,15 +9,21 @@ dayjs.extend(isBetween)
 
 const TransportationRequestPage = () => {
 
-  console.log("datejs example: ", dayjs('2021-08-01'))
-
-  let [transportation, setTransportation] = useState({})
-  let [passengers, setPassengers] = useState([])
+  let [request, setRequest] = useState({
+    From: null,
+    To: null,
+    Time: null,
+    Passengers: []
+  })
+  let [people, setPeople] = useState([])
+  let [transportation,setTransportation] = useState([])
   
   useEffect(() => {
-    getPassengers()
+    getPeople()
+    getTransportation()
   }, []);
 
+  
   return (
     <Page>
       <Navbar title="Transportation Request Form" backLink="Back" />
@@ -26,7 +32,7 @@ const TransportationRequestPage = () => {
               <ListInput
                   label="Departure time"
                   type="datepicker"
-                  defaultValue="2021-08-01"
+                  value="2021-08-01"
                   
                   placeholder="Please choose..."
                   calendarParams={{
@@ -49,6 +55,7 @@ const TransportationRequestPage = () => {
                 label="Location"
                 type="select"
                 placeholder="Please choose..."
+                onChange={(e)=>console.log("location change: ", e)}
               >
                 {/* <Icon icon="demo-list-icon" slot="media"/> */}
                 <option value="Airport">Airport</option>
@@ -81,30 +88,69 @@ const TransportationRequestPage = () => {
                   openIn: 'popup',
                   searchbar: true,
                   searchbarPlaceholder: 'Search people',
+                  on: {
+                    change(ss, value) {
+                      // console.log("smart select value: ",value)
+                      let tempRequest = request
+                      tempRequest["Passengers"] = value
+                      setRequest(tempRequest)
+                      // console.log("updated request: ", request)
+                    }
+                  }
                 }}
               >
-                <select name="person" multiple defaultValue={[]}>
-                  <optgroup label="Flight: ABC123 (17:00)">
-                    <option value="John Doe - ABC123">John Doe</option>
-                    <option value="Jane Doe- ABC123">Jane Doe</option>
-                  </optgroup>
-                  <optgroup label="Flight: XYZ987 (17:35)">
-                    <option value="John Fonda - XYZ987">John Fonda</option>
-                    <option value="Miriam Maple - XYZ987">Miriam Maple</option>
-                    <option value="Alex Raduca - XYZ987">Alex Raduca</option>
-                    <option value="Boris Johnson - XYZ987">Boris Johnson</option>
-                  </optgroup>
+                <select name="person" multiple>
+                  {/* <optgroup label="Flight: XYZ987 (17:35)"> */}
+                    {people.map((person,id) => {return (<option key={id} value={person.id}>{person.fields.Name}</option>)})}
+                  {/* </optgroup> */}
                 </select>
               </ListItem>
               
             </ListGroup>
-            <Button fill>Save shuttle information</Button>
+            <Button fill>Save transportation request</Button>
           </List>
       
     </Page>
   );
-
   
-  function getPassengers() {}
+    
+  function getPeople() {
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbllZ7xwJ94GXrVsT",
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setPeople(data.records);
+          console.log("people: ", people);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+  function getTransportation() {
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbleaxo1OqwVqJwBk",
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setTransportation(data.records);
+          console.log("transportation",transportation);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
 }
 export default TransportationRequestPage;

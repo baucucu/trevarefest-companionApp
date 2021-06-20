@@ -8,22 +8,37 @@ dayjs.extend(utc)
 const TransportationPage = ({ f7router }) => {
   
   const [filters, setFilters] = useState({
-    "Arrival": false,
-    "Shuttle": false,
-    "Festival Transportation": false,
-    "Departure": false,
-    "Request": true
+    "Arrival": {
+      value:false,
+      color: "purple"
+    },
+    "Shuttle": {
+      value:false,
+      color: "blue"
+    },
+    "Festival Transportation": {
+      value:false,
+      color: "teal"
+    },
+    "Departure": {
+      value:false,
+      color: "deeppurple"
+    },
+    "Request": {
+      value:false,
+      color: "red"
+    }
   })
 
   const [transportation, setTransportation] = useState([])
 
   function changeFilters(filter) {
-    console.log("current filters: ", filters)
+    // console.log("current filters: ", filters)
     let tempFilters = filters
-    tempFilters[filter] = !tempFilters[filter]
-    console.log("temp filters: ", tempFilters)
+    tempFilters[filter].value = !tempFilters[filter].value
+    // console.log("temp filters: ", tempFilters)
     setFilters({...filters,...tempFilters})
-    console.log("new filters: ", filters)
+    // console.log("new filters: ", filters)
     
   }
 
@@ -68,21 +83,18 @@ const TransportationPage = ({ f7router }) => {
       </Toolbar>
         <BlockTitle>Filters</BlockTitle>
         <Block strong>
-          <Link onClick={()=> changeFilters("Arrival")}>
-            <Chip outline={filters["Arrival"]}  text="Arrivals" color="green" />
-          </Link>
-          <Link onClick={()=>changeFilters("Shuttle")}>
-            <Chip outline={filters["Shuttle"]}  text="Shuttles" color="blue" />
-          </Link>
-          <Link onClick={()=>changeFilters("Festival Transportation")}>
-            <Chip outline={filters["Festival Transportation"]}  text="Festival Transportation" color="orange" />
-          </Link>
-          <Link onClick={()=>changeFilters("Departure")}>
-            <Chip outline={filters["Departure"]}  text="Departures" color="red" />
-          </Link>
+          {Object.keys(filters).map((filter,id)=>{
+            return (
+              <Link key={id} onClick={()=> changeFilters(filter)}>
+                <Chip outline={filters[filter].value}  text={filter} color={filters[filter].color} style={{marginRight:"4px"}}>
+                  <Badge style={{marginLeft: "4px"}} bgColor={filters[filter].value ? filters[filter].color : "white"} textColor={filters[filter].value ? "black": filters[filter].color}>5</Badge>
+                </Chip>
+              </Link>    
+            )
+          })}
         </Block>
           <List mediaList>
-            {transportation.sort((a, b) => (dayjs(a.fields.Time).isAfter(dayjs(b.fields.Time)) ? 1 : -1)).filter(item=>!filters[item.fields.Type]).map((item,id) => {
+            {transportation.sort((a, b) => (dayjs(a.fields.Time).isAfter(dayjs(b.fields.Time)) ? 1 : -1)).filter(item=>!filters[item.fields.Type].value).map((item,id) => {
               let formattedTime = dayjs.utc(item.fields.Time).format("D MMM - HH:mm").toString()
               return (
                 <ListItem
