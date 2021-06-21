@@ -1,5 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import { Page,Button,  Navbar,Toolbar, List, ListItem, BlockTitle, NavRight, Link, Icon,Badge, Block, Chip} from 'framework7-react';
+import { filter } from 'dom7';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
@@ -87,7 +88,7 @@ const TransportationPage = ({ f7router }) => {
             return (
               <Link key={id} onClick={()=> changeFilters(filter)}>
                 <Chip outline={filters[filter].value}  text={filter} color={filters[filter].color} style={{marginRight:"4px"}}>
-                  <Badge style={{marginLeft: "4px"}} bgColor={filters[filter].value ? filters[filter].color : "white"} textColor={filters[filter].value ? "black": filters[filter].color}>5</Badge>
+                  <Badge style={{marginLeft: "4px"}} bgColor='white' textColor={filters[filter].color}>5</Badge>
                 </Chip>
               </Link>    
             )
@@ -99,6 +100,8 @@ const TransportationPage = ({ f7router }) => {
               return (
                 <ListItem
                   key={id}
+                  bgColor={filters[item.fields.Type].color}
+                  style={{marginBottom:"4px", backgroundBlendMode:true}}
                   link={"/transportation/"+item.id}
                   title={`${item.fields["Transportation"]}`}
                   after={formattedTime}
