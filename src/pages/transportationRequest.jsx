@@ -33,8 +33,16 @@ const TransportationRequestPage = () => {
                   label="Departure time"
                   type="datepicker"
                   value="2021-08-01"
-                  
+                  required
+                  errorMessage="Please enter the transportation time"
+                  errorMessageForce={!request.From}
                   placeholder="Please choose..."
+                  onCalendarChange={(e)=>{
+                    console.log("time: ",e)
+                    let tempRequest = request
+                    tempRequest["Time"] = e[0]
+                    setRequest(tempRequest)
+                  }}
                   calendarParams={{
                     minDate:"2021-07-31",
                     maxDate:"2021-08-06",
@@ -54,8 +62,15 @@ const TransportationRequestPage = () => {
               <ListInput
                 label="Location"
                 type="select"
+                required
                 placeholder="Please choose..."
-                onChange={(e)=>console.log("location change: ", e)}
+                errorMessage="Please enter the pick-up location"
+                errorMessageForce={!request.From}
+                onChange={(e)=>{
+                  let tempRequest = request
+                  tempRequest["From"] = e.target.value
+                  setRequest(tempRequest)
+                }}
               >
                 {/* <Icon icon="demo-list-icon" slot="media"/> */}
                 <option value="Airport">Airport</option>
@@ -72,6 +87,12 @@ const TransportationRequestPage = () => {
                 type="select"
                 defaultValue={false}
                 placeholder="Please choose..."
+                errorMessage="Please enter the destination"
+                onChange={(e)=>{
+                  let tempRequest = request
+                  tempRequest["To"] = e.target.value
+                  setRequest(tempRequest)
+                }}
               >
                 {/* <Icon icon="demo-list-icon" slot="media"/> */}
                 <option value="Airport">Airport</option>
@@ -107,12 +128,35 @@ const TransportationRequestPage = () => {
               </ListItem>
               
             </ListGroup>
-            <Button fill>Save transportation request</Button>
+            <Button fill onClick={() => submitRequest(request)}>Save transportation request</Button>
           </List>
       
     </Page>
   );
   
+  function submitRequest(request) {
+    console.log("submitted: ", request)
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbleaxo1OqwVqJwBk",
+        {
+          method: 'POST', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+          },
+          body: {
+                "fields": {
+                  "Type": "Request",
+                  "Passengers": request.Passengers,
+                  "Time": request.Time,
+                  "To": request.To,
+                  "From": request.From
+                },
+            typecast: true
+          }
+          
+        }
+      )
+  }
     
   function getPeople() {
     fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbllZ7xwJ94GXrVsT",

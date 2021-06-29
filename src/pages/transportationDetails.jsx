@@ -1,13 +1,13 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Block, BlockTitle, List, ListItem, Chip, Icon, Card, CardContent, CardHeader, Link } from 'framework7-react';
+import { Page, Navbar, Block, BlockTitle, List, ListItem, Chip, Icon, Card, CardContent, CardHeader, Link, f7route, f7router } from 'framework7-react';
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 
-const TransportationDetailsPage = () => {
+const TransportationDetailsPage = (transportation) => {
 
-  let [flight, setFlights] = useState([])
+  let [trasportation, setTransportation] = useState([])
   
   useEffect(() => {
   }, []);

@@ -6,24 +6,21 @@ var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 
+
 const TransportationPage = ({ f7router }) => {
   
   const [filters, setFilters] = useState({
     "Arrival": {
       value:false,
-      color: "purple"
-    },
-    "Shuttle": {
-      value:false,
-      color: "blue"
-    },
-    "Festival Transportation": {
-      value:false,
-      color: "teal"
+      color: "lightblue"
     },
     "Departure": {
       value:false,
-      color: "deeppurple"
+      color: "blue"
+    },
+    "Shuttle": {
+      value:false,
+      color: "green"
     },
     "Request": {
       value:false,
@@ -62,6 +59,10 @@ const TransportationPage = ({ f7router }) => {
           console.log(error);
         });
   }
+
+  function createAfter(type) {
+    if(type === "Shuttle") {return "Add passenger"} else {return "Book a shuttle"}
+  }
   
   useEffect(() => {
     getTransportation()
@@ -84,7 +85,7 @@ const TransportationPage = ({ f7router }) => {
       </Toolbar>
         <BlockTitle>Filters</BlockTitle>
         <Block strong>
-          {Object.keys(filters).map((filter,id)=>{
+          {Object.keys(filters).map((filter,id)=>{  
             return (
               <Link key={id} onClick={()=> changeFilters(filter)}>
                 <Chip outline={filters[filter].value}  text={filter} color={filters[filter].color} style={{marginRight:"4px"}}>
@@ -94,30 +95,65 @@ const TransportationPage = ({ f7router }) => {
             )
           })}
         </Block>
-          <List mediaList>
+          <List mediaList noHairlines>
             {transportation.sort((a, b) => (dayjs(a.fields.Time).isAfter(dayjs(b.fields.Time)) ? 1 : -1)).filter(item=>!filters[item.fields.Type].value).map((item,id) => {
-              let formattedTime = dayjs.utc(item.fields.Time).format("D MMM - HH:mm").toString()
-              return (
-                <ListItem
-                  key={id}
-                  bgColor={filters[item.fields.Type].color}
-                  style={{marginBottom:"4px", backgroundBlendMode:true}}
-                  link={"/transportation/"+item.id}
-                  title={`${item.fields["Transportation"]}`}
-                  after={formattedTime}
-                  subtitle="Passengers"
-                >
-                    <Chip style={{marginRight:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={item.fields["Passengers"].length} />
-                    <Chip style={{marginRight:"8px"}} text="with shuttle" mediaBgColor="green" media={String(item.fields["Shuttle passengers count"])} />
-                    <Chip style={{marginRight:"8px"}} text="no shuttle" mediaBgColor="red" media={item.fields["Passengers"].length} />
-                </ListItem>
-              )
+              console.log(item)
+              if (item.fields.Type === "Shuttle") {
+                return (
+                  <ListItem
+                    style={{marginBottom:"4px", backgroundBlendMode:true}}
+                    link={"/transportation/"+item.id}
+                    title={`${item.fields["Transportation"]}`}
+                    badge="Add passengers"
+                    badgeColor={filters[item.fields.Type].color}
+                    textColor={filters[item.fields.Type].color}
+                    noChevron
+                    textColor={filters[item.fields.Type].color}
+                  >
+                    Passengers  
+                    <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Onboard" mediaBgColor="green" media={item.fields["Passengers"].length} />
+                  </ListItem>
+                )} else if (item.fields.Type === "Request") {
+                  return (
+                    <ListItem 
+                      // bgColor={filters[item.fields.Type].color}
+                      style={{marginBottom:"4px", backgroundBlendMode:true}}
+                      link={"/transportation/"+item.id}
+                      title={`${item.fields["Transportation"]}`}
+                      badge="Book a shuttle"
+                      badgeColor={filters[item.fields.Type].color}
+                      textColor={filters[item.fields.Type].color}
+                      noChevron
+                      // subtitle={item.fields.Type}
+                    >
+                      Passengers  
+                      <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Requesting" mediaBgColor="red" media={item.fields["Passengers"].length} />
+                    </ListItem>
+                  )
+                } else {
+                  return (
+                    <ListItem 
+                      // bgColor={filters[item.fields.Type].color}
+                      style={{marginBottom:"4px", backgroundBlendMode:true}}
+                      link={"/transportation/"+item.id}
+                      title={`${item.fields["Transportation"]}`}
+                      badge="Book a shuttle"
+                      textColor={filters[item.fields.Type].color}
+                      badgeColor={filters[item.fields.Type].color}
+                      textColor={filters[item.fields.Type].color}
+                      noChevron
+                    >
+                      Passengers  
+                      <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={item.fields["Passengers"].length} />
+                      <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(item.fields["Shuttle passengers count"])} />
+                      <Chip style={{marginRight:"8px"}} text="No shuttle" mediaBgColor="red" media={item.fields["Passengers"].length} />
+                    </ListItem>
+                  )
+                }
             })}
           </List>
     </Page>
   );
-
-  
 }
-export default TransportationPage;
 
+export default TransportationPage;
