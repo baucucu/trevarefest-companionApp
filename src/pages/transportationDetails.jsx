@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Block, BlockHeader, BlockTitle, List, ListItem, Chip, Icon, Card, CardContent, CardHeader, Link, f7route, f7router, f7, f7ready, ListButton} from 'framework7-react';
+import { Page, Navbar, Block, BlockHeader, BlockTitle, List, ListItem, Chip, ListGroup,Icon, Card, CardContent, CardHeader, Link, f7route, f7router, f7, f7ready, ListButton} from 'framework7-react';
 
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
@@ -52,13 +52,37 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
     });
   }
 
+  function getPeople() {
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbllZ7xwJ94GXrVsT",
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setPeople(data.records);
+          console.log("people: ", people);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+
   let [transportation, setTransportation] = useState()
   let [passengers,setPassengers] = useState([])
+  let [people, setPeople] = useState([])
   
   useEffect(() => {
     getTransportation(f7route.params.transportationId)
-    
   }, []);
+
+  useEffect(()=>{
+    getPeople()
+  },[])
 
   useEffect(() => {
     transportation?.fields.Passengers.map(passengerId => {
@@ -81,6 +105,9 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
       </Block>
       <BlockTitle>Passenger list</BlockTitle>
       <List mediaList  >
+        <ListGroup>
+          <ListItem title="Shuttle passengers" groupTitle></ListItem>
+        </ListGroup>
         {passengers.map((passenger,id) => {
           return (
             <ListItem
@@ -94,8 +121,34 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
             </ListItem>
           )
         })}
-        {transportation?.fields.Type === "Shuttle" && <ListButton>Add passengers</ListButton>}
-        {transportation?.fields.Type!=="Shuttle"  && <ListButton>Book a shuttle</ListButton>}
+        <ListGroup>
+          <ListItem title="Add passengers to shuttle" groupTitle></ListItem>
+          <ListItem
+            title="People list"
+            smartSelect
+            smartSelectParams={{
+              openIn: 'popup',
+              searchbar: true,
+              searchbarPlaceholder: 'Search people',
+              on: {
+                change(ss, value) {
+                  // console.log("smart select value: ",value)
+                  let tempRequest = request
+                  tempRequest["Passengers"] = value
+                  // setRequest(tempRequest)
+                  // console.log("updated request: ", request)
+                }
+              }
+            }}
+            >
+              <select name="person" multiple>
+                {/* <optgroup label="Flight: XYZ987 (17:35)"> */}
+                  {people.map((person,id) => {return (<option key={id} value={person.id}>{person.fields.Name}</option>)})}
+                {/* </optgroup> */}
+              </select>
+            </ListItem>
+        </ListGroup>
+        
       </List>  
       
     </Page>
