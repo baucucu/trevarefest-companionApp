@@ -133,8 +133,8 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
               on: {
                 change(ss, value) {
                   // console.log("smart select value: ",value)
-                  let tempRequest = request
-                  tempRequest["Passengers"] = value
+                  // let tempRequest = request
+                  // tempRequest["Passengers"] = value
                   // setRequest(tempRequest)
                   // console.log("updated request: ", request)
                 }
@@ -142,14 +142,16 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
             }}
             >
               <select name="person" multiple>
-                {/* <optgroup label="Flight: XYZ987 (17:35)"> */}
                   {people.map((person,id) => {return (<option key={id} value={person.id}>{person.fields.Name}</option>)})}
-                {/* </optgroup> */}
               </select>
             </ListItem>
         </ListGroup>
-        
       </List>  
+      <List>
+        <ListButton >
+          Save shuttle details
+        </ListButton>
+      </List>
       
     </Page>
   );
