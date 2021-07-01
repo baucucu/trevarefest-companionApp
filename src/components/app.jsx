@@ -53,13 +53,13 @@ const MyApp = () => {
 
   const user = store.getters.user
 
-  console.log('app.js user: ',user.value.id)
+  // console.log('app.js user: ',user.value.id)
 
   f7ready(() => {
 
 
     // Call F7 APIs here
-    console.log("url: ",f7.f7route)
+    // console.log("url: ",f7.f7route)
   });
   
   return (

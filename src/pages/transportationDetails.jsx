@@ -1,21 +1,102 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Block, BlockTitle, List, ListItem, Chip, Icon, Card, CardContent, CardHeader, Link, f7route, f7router } from 'framework7-react';
+import { Page, Navbar, Block, BlockHeader, BlockTitle, List, ListItem, Chip, Icon, Card, CardContent, CardHeader, Link, f7route, f7router, f7, f7ready, ListButton} from 'framework7-react';
+
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
 
-const TransportationDetailsPage = (transportation) => {
+const TransportationDetailsPage = ({f7route, f7router}) => {
 
-  let [trasportation, setTransportation] = useState([])
+  function getTransportation(id) {
+    fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20Transportation/${id}`,
+      {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+        },
+      }
+    )
+    .then((res) => res.json())
+    .then((data) => {
+      setTransportation(data);
+      console.log("retrieved transportation:",data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  
+
+  function getPassengers(personId) {
+    fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbllZ7xwJ94GXrVsT/${personId}`,
+      {
+        method: 'GET', // *GET, POST, PUT, DELETE, etc.
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+        },
+      }
+    )
+    .then((res) => res.json())
+    .then((data) => {
+      
+      setPassengers(passengers => [...passengers,data])
+      
+      console.log("retrieved passenger:",data);
+    })
+    .catch((error) => {
+      console.log(error);
+    });
+  }
+
+  let [transportation, setTransportation] = useState()
+  let [passengers,setPassengers] = useState([])
   
   useEffect(() => {
+    getTransportation(f7route.params.transportationId)
+    
   }, []);
+
+  useEffect(() => {
+    transportation?.fields.Passengers.map(passengerId => {
+      getPassengers(passengerId)
+    })
+  },[transportation])
+
+  useEffect(() => {
+    console.log("passengers modified: ", passengers.length)
+  },[passengers])
 
   return (
     <Page>
-      <Navbar title="Transportation Details" backLink="Back" />
-      <BlockTitle>Transportation ID</BlockTitle>
+      <Navbar title={`${transportation?.fields.Type} details`} backLink="Back" />
+      <BlockHeader >{transportation?.fields.Transportation}</BlockHeader>
+      <Block>
+        <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={transportation?.fields["Passengers"].length} />
+        <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(transportation?.fields["Shuttle passengers count"])} />
+        <Chip style={{marginRight:"8px"}} text="No shuttle" mediaBgColor="red" media={transportation?.fields["Passengers"].length} />
+      </Block>
+      <BlockTitle>Passenger list</BlockTitle>
+      <List mediaList  >
+        {passengers.map((passenger,id) => {
+          return (
+            <ListItem
+              key={id}
+              style={{marginBottom:"4px", backgroundBlendMode:true}}
+              title={`${passenger.fields["Person"]}`}
+              noChevron
+            >
+
+
+            </ListItem>
+          )
+        })}
+        {transportation?.fields.Type === "Shuttle" && <ListButton>Add passengers</ListButton>}
+        {transportation?.fields.Type!=="Shuttle"  && <ListButton>Book a shuttle</ListButton>}
+      </List>  
       
     </Page>
   );

@@ -21,7 +21,7 @@ export const PassengerTimeline = (userId) => {
             .then((res) => res.json())
             .then((data) => {
                 setUser(data);
-                console.log(data);
+                // console.log(data);
             })
             .catch((error) => {
                 console.log(error);

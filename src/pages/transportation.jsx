@@ -53,7 +53,7 @@ const TransportationPage = ({ f7router }) => {
         .then((res) => res.json())
         .then((data) => {
           setTransportation(data.records);
-          console.log(data);
+          // console.log(data);
         })
         .catch((error) => {
           console.log(error);
@@ -95,12 +95,13 @@ const TransportationPage = ({ f7router }) => {
             )
           })}
         </Block>
-          <List mediaList noHairlines>
+          <List mediaList noHairlines >
             {transportation.sort((a, b) => (dayjs(a.fields.Time).isAfter(dayjs(b.fields.Time)) ? 1 : -1)).filter(item=>!filters[item.fields.Type].value).map((item,id) => {
-              console.log(item)
+              // console.log(item)
               if (item.fields.Type === "Shuttle") {
                 return (
                   <ListItem
+                    key={id}
                     style={{marginBottom:"4px", backgroundBlendMode:true}}
                     link={"/transportation/"+item.id}
                     title={`${item.fields["Transportation"]}`}
@@ -116,7 +117,7 @@ const TransportationPage = ({ f7router }) => {
                 )} else if (item.fields.Type === "Request") {
                   return (
                     <ListItem 
-                      // bgColor={filters[item.fields.Type].color}
+                      key={id}
                       style={{marginBottom:"4px", backgroundBlendMode:true}}
                       link={"/transportation/"+item.id}
                       title={`${item.fields["Transportation"]}`}
@@ -133,7 +134,7 @@ const TransportationPage = ({ f7router }) => {
                 } else {
                   return (
                     <ListItem 
-                      // bgColor={filters[item.fields.Type].color}
+                      key={id}
                       style={{marginBottom:"4px", backgroundBlendMode:true}}
                       link={"/transportation/"+item.id}
                       title={`${item.fields["Transportation"]}`}

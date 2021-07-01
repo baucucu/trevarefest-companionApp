@@ -20,7 +20,6 @@
     "Samsung >= 5"
   ],
   "dependencies": {
-    "airtable": "^0.11.1",
     "dayjs": "^1.10.5",
     "dom7": "^3.0.0",
     "framework7": "^6.0.17",

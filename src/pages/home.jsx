@@ -19,7 +19,7 @@ const HomePage = (f7) => {
   let [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    console.log("user id is in store? ", store.getters.user.value?.id)
+    // console.log("user id is in store? ", store.getters.user.value?.id)
     if(store.getters.user.value?.id) { setUser(store.getters.user.value)} else {getUser(f7.f7route.query.user)}
   }, [])
 
@@ -37,7 +37,7 @@ const HomePage = (f7) => {
         .then((res) => res.json())
         .then((data) => {
   
-          console.log("user record: ", data)
+          // console.log("user record: ", data)
           setUser(data);
           // call 'getUsers' actions
           store.dispatch('setUser', data)
