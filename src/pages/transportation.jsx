@@ -80,7 +80,7 @@ const TransportationPage = ({ f7router }) => {
         </NavRight>
       </Navbar>
       <Toolbar bottom>
-        <Link href="/transportation/pending/">Pending requests</Link>
+        {/* <Link href="/transportation/pending/">Pending requests</Link> */}
         <Link href="/transportation/request/">New request</Link>
       </Toolbar>
         <BlockTitle>Filters</BlockTitle>
