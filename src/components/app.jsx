@@ -80,8 +80,8 @@ const MyApp = () => {
                 <ListItem link={`/?user=${user.value.id}`} view=".view-main" panelClose title="My Festival Agenda"/>
                 <ListItem link="/transportation/" view=".view-main" panelClose title="Transportation"/>
                 {/* <ListItem link="/shuttles/" view=".view-main" panelClose title="Shuttles"/> */}
-                <ListItem link="/people/" view=".view-main" panelClose title="People"/>
-                <ListItem link="/activities/" view=".view-main" panelClose title="Activities"/>
+                {/* <ListItem link="/people/" view=".view-main" panelClose title="People"/> */}
+                {/* <ListItem link="/activities/" view=".view-main" panelClose title="Activities"/> */}
                 {/* <ListItem link="/about/" view=".view-main" panelClose title="About"/> */}
                 {/* <ListItem link="/form/" view=".view-main" panelClose title="Form"/> */}
                 {/* <ListItem link="#" view=".view-main" back panelClose title="Back in history"/> */}

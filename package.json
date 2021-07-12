@@ -20,6 +20,7 @@
     "Samsung >= 5"
   ],
   "dependencies": {
+    "axios": "^0.21.1",
     "dayjs": "^1.10.5",
     "dom7": "^3.0.0",
     "framework7": "^6.0.17",
