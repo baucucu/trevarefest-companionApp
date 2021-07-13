@@ -7,7 +7,7 @@ dayjs.extend(utc)
 dayjs.extend(isBetween)
 
 
-const TransportationRequestPage = () => {
+const TransportationRequestPage = (props) => {
 
   let [request, setRequest] = useState({
     From: null,
@@ -23,7 +23,10 @@ const TransportationRequestPage = () => {
     getTransportation()
   }, []);
 
-  
+  useEffect(() => {
+    console.log("props: ", props)
+  },[])
+
   return (
     <Page>
       <Navbar title="Transportation Request Form" backLink="Back" />
@@ -85,7 +88,7 @@ const TransportationRequestPage = () => {
               <ListInput
                 label="Location"
                 type="select"
-                defaultValue={false}
+                defaultValue={props?.transportation?.fields["From Name"]}
                 placeholder="Please choose..."
                 errorMessage="Please enter the destination"
                 onChange={(e)=>{
@@ -171,7 +174,6 @@ const TransportationRequestPage = () => {
         .then((res) => res.json())
         .then((data) => {
           setPeople(data.records);
-          console.log("people: ", people);
         })
         .catch((error) => {
           console.log(error);
@@ -190,7 +192,6 @@ const TransportationRequestPage = () => {
         .then((res) => res.json())
         .then((data) => {
           setTransportation(data.records);
-          console.log("transportation",transportation);
         })
         .catch((error) => {
           console.log(error);

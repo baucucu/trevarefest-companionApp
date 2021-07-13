@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import { Page, Navbar, Block, BlockHeader, Toolbar,BlockTitle, List, ListItem, Chip, ListGroup,SwipeoutActions, SwipeoutButton, ListButton, NavRight, Link, Icon, Badge} from 'framework7-react';
+import { Button, Page, Navbar, Block, BlockHeader, Toolbar,BlockTitle, List, ListItem, Chip, ListGroup,SwipeoutActions, SwipeoutButton, ListButton, NavRight, Link, Icon, Badge} from 'framework7-react';
 import axios from 'axios';
 
 var dayjs = require('dayjs')
@@ -70,19 +70,9 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
         });
   }
 
-  function hasShuttle(passengerId, shuttles) {
-    let shuttlesIds = shuttles.map(shuttle => shuttle.id)
-    console.log("hasShuttles shuttlesIds: ",shuttlesIds)
-    let passenger = passengers.filter(passenger => passenger.id === passengerId)[0]
-    console.log("hasShuttle passenger: ", passenger)
-    let passengerShuttles = passenger?.fields?.Shuttles
-    console.log("hasShuttles passengerShuttles: ", passengerShuttles)
+  function hasShuttle(passengerId, transportation) {
     let result = false
-    if(passengerShuttles) {
-      console.log("matching passenger shuttles")
-      result = passenger.fields?.Shuttles.filter(shuttle => shuttlesIds.includes(shuttle)).length > 0 ? true : false
-      console.log("hasShuttle result: ", result)
-    }
+    if(transportation?.fields?.withShuttle?.includes(passengerId)) {result = true}
     return result
   }
   
@@ -106,17 +96,18 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
     });
   }
 
-  function saveShuttle(shuttle,tempPassagengers) {
+  function saveShuttle(passengers,shuttleId) {
+    
+    let shuttle = shuttles.filter(s => s.id === shuttleId)[0]
     console.log("shuttle to be saved: ", shuttle)
     let shuttlePassengers = shuttle.fields["Passengers"]
     console.log("shuttle passengers: ", shuttlePassengers)
-    
-    let newPassengers = [...tempPassagengers,...shuttlePassengers]
+    let newPassengers = [...passengers,...shuttlePassengers]
     console.log("new passengers: ", newPassengers)
     
     let data = {records : [
       {
-        id: shuttle.id,
+        id: shuttleId,
         fields: {
           "Passengers": newPassengers
         }
@@ -134,23 +125,27 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
       },
       data : data
     })
-      // .then((res) => res.json())
       .then((response) => {
         console.log("shuttle saved: ",response.data)
         setPassengers([])
         setShuttles([])
-        setTempPassengers([])
+        // setTransportation({})
         getTransportation(f7route.params.transportationId)  
       })
       .catch((error) => {
         console.log(error);
       });
   }
+  function refreshPage(done) {
+    setPassengers([])
+    setShuttles([])
+    getTransportation(f7route.params.transportationId)
+    done();
+  }
 
   let [transportation, setTransportation] = useState()
   let [shuttles,setShuttles] = useState([])
   let [passengers,setPassengers] = useState([])
-  let [withShuttles,setWithShuttles] = useState([])
   let [people, setPeople] = useState([])
   let [tempPassagengers, setTempPassengers] = useState([])
   
@@ -176,8 +171,8 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
 
   useEffect(() => {
     console.log("passengers modified: ", passengers)
-    let shuttlePassengers = passengers.filter(passenger => {return(hasShuttle(passenger.id,shuttles))})
-    setWithShuttles(shuttlePassengers)
+    // let shuttlePassengers = passengers.filter(passenger => {return(hasShuttle(passenger.id,shuttles))})
+    // setWithShuttles(shuttlePassengers)
   },[passengers])
 
   useEffect(() => {
@@ -189,24 +184,30 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
   },[shuttles])
 
   return (
-    <Page>
-      <Navbar title={`${transportation?.fields.Type} details`} backLink="Back" />
+    <Page ptr ptrMousewheel={true} onPtrRefresh={refreshPage}>
+      <Navbar title={`${transportation?.fields?.Type} details`} backLink="Back" />
       <Toolbar bottom>
-        <Link href="/transportation/request/">Request a new shuttle for this flight</Link>
+        {/* <Link href="/transportation/request/">Request a new shuttle for this flight</Link> */}
+        <Button onClick={()=>{
+          f7router.navigate('/transportation/request/', {
+            props: {
+              transportation: transportation
+            }
+          })
+        }}>Request a new shuttle for this flight</Button>
       </Toolbar>
       <BlockHeader >{transportation?.fields.Transportation}</BlockHeader>
-      {["Shuttle","Request"].includes(transportation?.fields.Type) || <Block>
+      {["Shuttle","Request"].includes(transportation?.fields?.Type) || <Block>
         <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={transportation?.fields["Passengers"].length} />
         {/* <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(transportation?.fields["Shuttle passengers count"])} /> */}
-        <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={withShuttles.length} />
-        {transportation?.fields["Passengers"].length !== withShuttles.length && <Chip style={{marginRight:"8px"}} text="No shuttle" mediaBgColor="red" media={String(transportation?.fields["Passengers"].length - withShuttles.length)} />}
-      </Block>}
+        <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(transportation?.fields.withShuttle ? transportation.fields.withShuttle.length : 0)} />
+        {transportation?.fields["Shuttle passengers count"] !== transportation?.fields["Passengers"].length && <Chip style={{marginRight:"8px"}} text="No shuttle" mediaBgColor="red" media={String(transportation?.fields.withoutShuttle ? transportation?.fields.withoutShuttle.length : 0)}/>}      </Block>}
       {/* <BlockTitle>Passenger list</BlockTitle> */}
       <List mediaList  >
         <ListGroup key="passengersList">
           <ListItem key="title1" title={transportation?.fields.Type === "Shuttle" ? "Shuttle passengers" : "Flight passengers"} groupTitle></ListItem>
         
-        {passengers.map((passenger,id) => {
+        {transportation && passengers.map((passenger,id) => {
           return (
             <ListItem
               key={id}
@@ -215,8 +216,8 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
               noChevron
               swipeout
             >
-              {["Shuttle","Request"].includes(transportation?.fields.Type) || hasShuttle(passenger.id, shuttles) && <Icon slot="media" size="large" material="checkmark_circle_fill" ios="checkmark_circle_fill" f7="checkmark_circle_fill" color="green"></Icon>}
-              {["Shuttle","Request"].includes(transportation?.fields.Type) || hasShuttle(passenger.id, shuttles) || <Icon slot="media" size="large" material="exclamationmark_circle_fill" ios="exclamationmark_circle_fill" f7="exclamationmark_circle_fill" color="red"></Icon>}
+              {["Shuttle","Request"].includes(transportation?.fields?.Type) || hasShuttle(passenger.id, transportation) && <Icon slot="media" size="large" material="checkmark_circle_fill" ios="checkmark_circle_fill" f7="checkmark_circle_fill" color="green"></Icon>}
+              {["Shuttle","Request"].includes(transportation?.fields?.Type) || hasShuttle(passenger.id, transportation) || <Icon slot="media" size="large" material="exclamationmark_circle_fill" ios="exclamationmark_circle_fill" f7="exclamationmark_circle_fill" color="red"></Icon>}
               <SwipeoutActions right>
                 <SwipeoutButton delete confirmText="Are you sure you want to delete this item?">
                   Delete
@@ -226,7 +227,7 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
           )
         })}
         </ListGroup >
-        {["Shuttle"].includes(transportation?.fields.Type) || <ListGroup key="shuttlesList">
+        {["Shuttle"].includes(transportation?.fields?.Type) || <ListGroup key="shuttlesList">
           <ListItem title="Connected shuttles" groupTitle></ListItem>
           {shuttles.map((shuttle,id)=> {
             return(
@@ -241,6 +242,7 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
                     openIn: 'popup',
                     searchbar: true,
                     searchbarPlaceholder: 'Search people',
+                    popupCloseLinkText	:"Save",
                     on: {
                       change(ss, value) {
                         console.log("smart select CHANGED: ",value)
@@ -249,21 +251,23 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
                       close(ss) {
                         console.log("smart select event: ",ss)
                         console.log("smart select closed value", ss.getValue())
+                        console.log("shuttle id: ", shuttle.id)
+                        saveShuttle(ss.getValue(),shuttle.id)
                       }
                     }
                   }}
                 >
                   <select name="person" multiple >
-                    {passengers.filter(person => !hasShuttle(person.id,shuttles)).map((person,pid) => {return (<option key={pid} value={person.id}>{person.fields.Name}</option>)})}
+                    {transportation?.fields?.withoutShuttle?.map((person,pid) => {return (<option key={pid} value={person}>{passengers.filter(passenger => passenger.id === person)[0]?.fields?.Name}</option>)})}
                   </select>
                 </ListItem>
-                {tempPassagengers.length > 0 && <ListButton key="submitButton" onClick={() => saveShuttle(shuttle,tempPassagengers)}>Save changes</ListButton>}
+                {/* {tempPassagengers.length > 0 && <ListButton key="submitButton" onClick={() => saveShuttle(shuttle,tempPassagengers)}>Save changes</ListButton>} */}
               </div>
             )
           })}
           
         </ListGroup>}
-        {transportation?.fields.Type === "Shuttle" && <ListGroup key="shuttlesSS">
+        {transportation?.fields?.Type === "Shuttle" && <ListGroup key="shuttlesSS">
           <ListItem title="Add passengers to shuttle" key="title3" groupTitle></ListItem>
           <ListItem
             key="smartSelect"

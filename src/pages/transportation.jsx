@@ -64,6 +64,11 @@ const TransportationPage = ({ f7router }) => {
           console.log(error);
         });
   }
+
+  function refreshPage(done) {
+    getTransportation()
+    done()
+  }
   
   useEffect(() => {
     getTransportation()
@@ -75,7 +80,7 @@ const TransportationPage = ({ f7router }) => {
   }, [transportation])
 
   return (
-    <Page>
+    <Page ptr ptrMousewheel={true} onPtrRefresh={refreshPage}>
       <Navbar title="Transportation">
         <NavRight>
           <Link iconOnly panelOpen="right">
