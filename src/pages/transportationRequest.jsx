@@ -19,6 +19,7 @@ const TransportationRequestPage = (props) => {
   })
   let [people, setPeople] = useState([])
   let [transportation,setTransportation] = useState([])
+  let [passengerList, setPassengerList] = useState([])
   let [locations, setLocations] = useState([])
   
   useEffect(() => {
@@ -29,8 +30,6 @@ const TransportationRequestPage = (props) => {
   }, []);
 
   useEffect(() => {
-    // console.log("props: ", props)
-    // console.log("dayjs utc: ",dayjs.utc(props?.transportation?.fields?.Time).format())
     console.log("props?.transportation: ", props?.transportation)
   },[])
 
@@ -46,10 +45,7 @@ const TransportationRequestPage = (props) => {
     console.log("people has changed: ", people)
     if(props?.transportation) {
       let passengers = people.filter(person => {return( props.transportation.fields?.withoutShuttle?.includes(person.id))})
-      let tempRequest = request
-      tempRequest.Passengers = passengers
-      console.log("changing passengers: ", passengers)
-      setRequest(tempRequest)
+      setPassengerList(passengers)
     }
   },[people])
 
@@ -150,7 +146,7 @@ const TransportationRequestPage = (props) => {
               >
                 <select name="person" multiple>
                   {/* <optgroup label="Flight: XYZ987 (17:35)"> */}
-                    {request.Passengers.map((person,id) => {return (<option key={id} value={person.id}>{person.fields.Name}</option>)})}
+                    {passengerList.map((person,id) => {return (<option key={id} value={person.id}>{person.fields.Name}</option>)})}
                   {/* </optgroup> */}
                 </select>
               </ListItem>
