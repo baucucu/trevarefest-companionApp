@@ -123,7 +123,7 @@ const TransportationPage = ({ f7router }) => {
                     textColor={filters[item.fields.Type].color}
                   >
                     Passengers  
-                    <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Onboard" mediaBgColor="green" media={item.fields["Passengers"].length} />
+                    <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Onboard" mediaBgColor="green" media={item?.fields["Passengers"]?.length} />
                   </ListItem>
                 )} else if (item.fields.Type === "Request") {
                   return (

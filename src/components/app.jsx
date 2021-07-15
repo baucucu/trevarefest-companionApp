@@ -37,7 +37,7 @@ const MyApp = () => {
 
   // Framework7 Parameters
   const f7params = {
-    name: 'Trevare Festival Companion App', // App name
+    name: 'Trevarefest', // App name
       theme: 'auto', // Automatic theme detection
 
       // App store

@@ -100,7 +100,7 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
     
     let shuttle = shuttles.filter(s => s.id === shuttleId)[0]
     console.log("shuttle to be saved: ", shuttle)
-    let shuttlePassengers = shuttle.fields["Passengers"]
+    let shuttlePassengers = shuttle?.fields["Passengers"] ? shuttle.fields["Passengers"] : []
     console.log("shuttle passengers: ", shuttlePassengers)
     let newPassengers = [...passengers,...shuttlePassengers]
     console.log("new passengers: ", newPassengers)
