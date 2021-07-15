@@ -186,8 +186,7 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
   return (
     <Page ptr ptrMousewheel={true} onPtrRefresh={refreshPage}>
       <Navbar title={`${transportation?.fields?.Type} details`} backLink="Back" />
-      <Toolbar bottom>
-        {/* <Link href="/transportation/request/">Request a new shuttle for this flight</Link> */}
+      {transportation && ["Arrival", "Departure"].includes(transportation?.fields.Type) && transportation.fields?.withoutShuttle  && < Toolbar bottom>
         <Button onClick={()=>{
           f7router.navigate('/transportation/request/', {
             props: {
@@ -195,7 +194,7 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
             }
           })
         }}>Request a new shuttle for this flight</Button>
-      </Toolbar>
+      </Toolbar>}
       <BlockHeader >{transportation?.fields.Transportation}</BlockHeader>
       {["Shuttle","Request"].includes(transportation?.fields?.Type) || <Block>
         <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={transportation?.fields["Passengers"].length} />

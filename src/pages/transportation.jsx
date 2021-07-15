@@ -90,9 +90,11 @@ const TransportationPage = ({ f7router }) => {
           </Link>
         </NavRight>
       </Navbar>
-      <Toolbar bottom>
-        {/* <Link href="/transportation/pending/">Pending requests</Link> */}
-        <Link href="/transportation/request/">New request</Link>
+      <Navbar title={`${transportation?.fields?.Type} details`} backLink="Back" />
+      < Toolbar bottom>
+        <Button onClick={()=>{
+          f7router.navigate('/transportation/request/')
+        }}>Request a new shuttle for this flight</Button>
       </Toolbar>
         <BlockTitle>Filters</BlockTitle>
         <Block strong>
