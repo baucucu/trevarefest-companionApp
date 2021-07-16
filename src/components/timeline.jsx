@@ -7,37 +7,13 @@ import {
     CardFooter,
   } from 'framework7-react';
 export const Timeline = (userId) => {
-
-    function getUser(userId) {
-        fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People/${userId}`,
-            {
-                method: 'GET', // *GET, POST, PUT, DELETE, etc.
-                headers: {
-                'Content-Type': 'application/json',
-                'Authorization': 'Bearer keyYNFILTvHzPsq1B'
-                },
-            }
-            )
-            .then((res) => res.json())
-            .then((data) => {
-                setUser(data);
-                // console.log(data);
-            })
-            .catch((error) => {
-                console.log(error);
-            });
-    }
-
+    
     let [user, setUser] = useState({})
     let [calendar, setCalendar] = useState([])
 
     useEffect(()=>{
         getUser(userId.userId)
     },[])
-
-    let tables = [
-        ""
-    ]
 
     useEffect(() => {
         // getFlights()
@@ -205,5 +181,24 @@ export const Timeline = (userId) => {
         </div>
         </div>
     )
+    function getUser(userId) {
+        fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People/${userId}`,
+            {
+                method: 'GET', // *GET, POST, PUT, DELETE, etc.
+                headers: {
+                'Content-Type': 'application/json',
+                'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+                },
+            }
+            )
+            .then((res) => res.json())
+            .then((data) => {
+                setUser(data);
+                console.log("user data: ", data);
+            })
+            .catch((error) => {
+                console.log(error);
+            });
+    }
 }
 
