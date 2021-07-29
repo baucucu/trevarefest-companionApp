@@ -79,7 +79,7 @@ const TransportationDetailsPage = (props) => {
     });
   }
 
-  function saveShuttle(passengers,shuttleId) {
+  function saveShuttle(passengers,car,driver,shuttleId) {
     
     let shuttle = shuttles.filter(s => s.id === shuttleId)[0]
     console.log("shuttle to be saved: ", shuttle)
@@ -92,7 +92,9 @@ const TransportationDetailsPage = (props) => {
       {
         "id": shuttleId,
         "fields": {
-          "Passengers": newPassengers
+          "Passengers": newPassengers,
+          "Car": car && [car],
+          "Driver": driver && [driver]
         }
       }
     ]}
@@ -110,8 +112,6 @@ const TransportationDetailsPage = (props) => {
     })
       .then((response) => {
         console.log("shuttle saved: ",response.data)
-        // setPassengers([])
-        // setShuttles([])
         f7router.refreshPage()  
       })
       .catch((error) => {
@@ -120,7 +120,7 @@ const TransportationDetailsPage = (props) => {
   }
 
   function getDrivers() {
-    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People?maxRecords=3&view=Full",
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People?view=Drivers",
         {
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
           headers: {
@@ -131,32 +131,58 @@ const TransportationDetailsPage = (props) => {
       )
         .then((res) => res.json())
         .then((data) => {
-          setPeople(data.records);
-          console.log("people: ", people);
+          setDrivers(data.records);
+          console.log("drivers: ", data.records);
         })
         .catch((error) => {
           console.log(error);
         });
   }
-  function getCars() {}
+  function getCars() {
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20Cars?view=Grid%20view",
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setCars(data.records);
+          console.log("cars: ", data.records);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
 
   function refreshPage(done) {
-    // setPassengers([])
-    // setShuttles([])
-    // getTransportation(f7route.params.transportationId)
     f7router.refreshPage()
     done();
   }
 
-  let [shuttles,setShuttles] = useState([])
-  let [passengers,setPassengers] = useState([])
-  let [people, setPeople] = useState([])
-  let [tempPassagengers, setTempPassengers] = useState([])
-  
+  const [shuttles,setShuttles] = useState([])
+  const [passengers,setPassengers] = useState([])
+  const [people, setPeople] = useState([])
+  const [tempPassagengers, setTempPassengers] = useState([])
+  const [cars,setCars] = useState([])
+  const [drivers,setDrivers] = useState([])
+  const [driver,setDriver] =useState()
+  const [car,setCar] =useState()
  
   useEffect((
   ) => {
     console.log("transportation: ", transportation)
+  },[])
+
+  useEffect(() => {
+    getCars()
+  },[])
+
+  useEffect(() => {
+    getDrivers()
   },[])
 
   useEffect(()=>{
@@ -176,6 +202,19 @@ const TransportationDetailsPage = (props) => {
   },[transportation])
 
   useEffect(() => {
+    if(transportation.fields.Type === "Shuttle") {
+      if(shuttles.length > 0) {
+        if(shuttles[0].fields.Car) {
+          setCar(shuttles[0].fields.Car[0])
+        }
+        if(shuttles[0].fields.Driver) {
+          setDriver(shuttles[0].fields.Driver[0])
+        }
+      }
+    }
+  },[shuttles,setShuttles])
+
+  useEffect(() => {
     console.log("passengers modified: ", passengers)
     // let shuttlePassengers = passengers.filter(passenger => {return(hasShuttle(passenger.id,shuttles))})
     // setWithShuttles(shuttlePassengers)
@@ -188,6 +227,14 @@ const TransportationDetailsPage = (props) => {
   useEffect(() => {
     console.log("shuttles modified: ", shuttles)
   },[shuttles])
+
+  useEffect(() => {
+    console.log("car modified: ", car)
+  },[car,setCar])
+
+  useEffect(() => {
+    console.log("driver modified: ", driver)
+  },[driver,setDriver])
 
   return (
     <Page ptr ptrMousewheel={true} onPtrRefresh={refreshPage}>
@@ -257,7 +304,7 @@ const TransportationDetailsPage = (props) => {
                         console.log("smart select event: ",ss)
                         console.log("smart select closed value", ss.getValue())
                         console.log("shuttle id: ", shuttle.id)
-                        saveShuttle(ss.getValue(),shuttle.id)
+                        saveShuttle(ss.getValue(),car, driver,shuttle.id)
                       }
                     }
                   }}
@@ -275,7 +322,7 @@ const TransportationDetailsPage = (props) => {
         {transportation?.fields?.Type === "Shuttle" && <ListGroup key="shuttlesSS">
           <ListItem title="Add passengers to shuttle" key="title3" groupTitle></ListItem>
           <ListItem
-            key="smartSelect"
+            // key="smartSelect"
             title="People list"
             smartSelect
             smartSelectParams={{
@@ -302,7 +349,7 @@ const TransportationDetailsPage = (props) => {
               <ListButton 
                 key="saveButton"
                 onClick={() => {
-                  saveShuttle(tempPassagengers,transportation.fields.Shuttle[0])
+                  saveShuttle(tempPassagengers,car,driver,transportation.fields.Shuttle[0])
                 }}>
                 Save shuttle details
               </ListButton>
@@ -310,8 +357,61 @@ const TransportationDetailsPage = (props) => {
         </ListGroup>}
         {transportation.fields.Type === "Shuttle" && <ListGroup>
           <ListItem groupTitle>Car & Driver</ListItem>
-          <ListItem>Car</ListItem>
-          <ListItem>Driver</ListItem>
+          <ListItem
+            title="Car"
+            smartSelect
+            smartSelectParams={{
+              openIn: 'popup',
+              searchbar: true,
+              searchbarPlaceholder: 'Search cars',
+              defaultValue: car?.[0],
+              on: {
+                change(ss, value) {
+                  console.log("smart select CHANGED: ",value)
+                  setCar(value)
+                },
+                close(ss) {
+                  console.log("smart select event: ",ss)
+                  console.log("smart select closed value", ss.getValue())
+                }
+              }
+            }}
+            >
+              <select name="car" >
+                  {cars.map((car,id) => {return (<option key={id} value={car.id}>{car.fields.Car}</option>)})}
+              </select>
+            </ListItem>
+          <ListItem
+            title="Driver"
+            smartSelect
+            smartSelectParams={{
+              openIn: 'popup',
+              searchbar: true,
+              searchbarPlaceholder: 'Search drivers',
+              defaultValue: driver?.[0],
+              on: {
+                change(ss, value) {
+                  console.log("smart select CHANGED: ",value)
+                  setDriver(value)
+                },
+                close(ss) {
+                  console.log("smart select event: ",ss)
+                  console.log("smart select closed value", ss.getValue())
+                }
+              }
+            }}
+            >
+              <select name="driver" >
+                  {drivers.map((driver,id) => {return (<option key={id} value={driver.id}>{driver.fields.Name}</option>)})}
+              </select>
+            </ListItem>
+            {(car ||driver ) && <ListButton 
+              key="saveButton"
+              onClick={() => {
+                saveShuttle(tempPassagengers,car,driver,transportation.fields.Shuttle[0])
+              }}>
+              Save shuttle details
+            </ListButton>}
         </ListGroup>}
       </List>
     </Page>
