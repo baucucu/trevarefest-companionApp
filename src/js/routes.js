@@ -15,6 +15,14 @@ const axios = require('axios');
 
 var routes = [
     {
+        path: '/transportation/pending',
+        component: TransportationPendingPage,
+      },
+      {
+        path: '/transportation/request',
+        component: TransportationRequestPage,
+      },
+    {
         path: '/transportation/:transportationId',
         async: function ({ router, to, resolve }) {
           // App instance

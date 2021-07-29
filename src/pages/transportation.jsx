@@ -81,7 +81,7 @@ const TransportationPage = (props) => {
                   <ListItem
                     key={id}
                     style={{marginBottom:"4px", backgroundBlendMode:true}}
-                    link={`/transportation/${+item.id}`}
+                    link={`/transportation/${item.id}`}
                     title={`${item.fields["Transportation"]}`}
                     badge="Add passengers"
                     badgeColor={filters[item.fields.Type].color}

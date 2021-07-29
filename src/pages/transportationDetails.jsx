@@ -113,7 +113,7 @@ const TransportationDetailsPage = (props) => {
         setPassengers([])
         setShuttles([])
         // setTransportation({})
-        getTransportation(f7route.params.transportationId)  
+        // getTransportation(f7route.params.transportationId)  
       })
       .catch((error) => {
         console.log(error);
@@ -122,7 +122,8 @@ const TransportationDetailsPage = (props) => {
   function refreshPage(done) {
     setPassengers([])
     setShuttles([])
-    getTransportation(f7route.params.transportationId)
+    // getTransportation(f7route.params.transportationId)
+    f7router.refreshPage()
     done();
   }
 
@@ -285,6 +286,11 @@ const TransportationDetailsPage = (props) => {
                 Save shuttle details
               </ListButton>
             }
+        </ListGroup>}
+        {transportation.fields.Type === "Shuttle" && <ListGroup>
+          <ListItem groupTitle>Car & Driver</ListItem>
+          <ListItem>Car</ListItem>
+          <ListItem>Driver</ListItem>
         </ListGroup>}
       </List>
     </Page>
