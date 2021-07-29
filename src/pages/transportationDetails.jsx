@@ -34,7 +34,7 @@ const TransportationDetailsPage = (props) => {
   }
 
   function getPeople() {
-    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People?maxRecords=3&view=Full",
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People?view=Full",
         {
           method: 'GET', // *GET, POST, PUT, DELETE, etc.
           headers: {
@@ -46,7 +46,7 @@ const TransportationDetailsPage = (props) => {
         .then((res) => res.json())
         .then((data) => {
           setPeople(data.records);
-          console.log("people: ", people);
+          console.log("people: ", data.records);
         })
         .catch((error) => {
           console.log(error);
@@ -88,10 +88,10 @@ const TransportationDetailsPage = (props) => {
     let newPassengers = [...passengers,...shuttlePassengers]
     console.log("new passengers: ", newPassengers)
     
-    let data = {records : [
+    let data = {"records" : [
       {
-        id: shuttleId,
-        fields: {
+        "id": shuttleId,
+        "fields": {
           "Passengers": newPassengers
         }
       }
@@ -110,18 +110,39 @@ const TransportationDetailsPage = (props) => {
     })
       .then((response) => {
         console.log("shuttle saved: ",response.data)
-        setPassengers([])
-        setShuttles([])
-        // setTransportation({})
-        // getTransportation(f7route.params.transportationId)  
+        // setPassengers([])
+        // setShuttles([])
+        f7router.refreshPage()  
       })
       .catch((error) => {
         console.log(error);
       });
   }
+
+  function getDrivers() {
+    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20People?maxRecords=3&view=Full",
+        {
+          method: 'GET', // *GET, POST, PUT, DELETE, etc.
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+          },
+        }
+      )
+        .then((res) => res.json())
+        .then((data) => {
+          setPeople(data.records);
+          console.log("people: ", people);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+  }
+  function getCars() {}
+
   function refreshPage(done) {
-    setPassengers([])
-    setShuttles([])
+    // setPassengers([])
+    // setShuttles([])
     // getTransportation(f7route.params.transportationId)
     f7router.refreshPage()
     done();
@@ -274,14 +295,14 @@ const TransportationDetailsPage = (props) => {
             }}
             >
               <select name="person" multiple>
-                  {people.map((person,id) => {return (<option key={id} value={person.id}>{person.fields.Name}</option>)})}
+                  {people.filter(person => {return(!passengers.map(passenger=>{return(passenger.id)}).includes(person.id))}).map((person,id) => {return (<option key={id} value={person.id}>{person.fields.Name}</option>)})}
               </select>
             </ListItem>
             {tempPassagengers?.length > 0 && 
               <ListButton 
                 key="saveButton"
                 onClick={() => {
-
+                  saveShuttle(tempPassagengers,transportation.fields.Shuttle[0])
                 }}>
                 Save shuttle details
               </ListButton>
