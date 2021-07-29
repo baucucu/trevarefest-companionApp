@@ -364,7 +364,7 @@ const TransportationDetailsPage = (props) => {
               openIn: 'popup',
               searchbar: true,
               searchbarPlaceholder: 'Search cars',
-              defaultValue: car?.[0],
+              // defaultValue: shuttles.length > 0 && shuttles[0].fields?.Car[0],
               on: {
                 change(ss, value) {
                   console.log("smart select CHANGED: ",value)
@@ -388,7 +388,8 @@ const TransportationDetailsPage = (props) => {
               openIn: 'popup',
               searchbar: true,
               searchbarPlaceholder: 'Search drivers',
-              defaultValue: driver?.[0],
+              // defaultValue: shuttles.length > 0  && shuttles[0].fields?.Driver[0],
+              // defaultValue: "rec6ZzAkwlGcihrPd",
               on: {
                 change(ss, value) {
                   console.log("smart select CHANGED: ",value)
