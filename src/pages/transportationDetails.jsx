@@ -170,7 +170,9 @@ const TransportationDetailsPage = (props) => {
   const [cars,setCars] = useState([])
   const [drivers,setDrivers] = useState([])
   const [driver,setDriver] =useState()
+  const [tempDriver, setTempDriver] = useState()
   const [car,setCar] =useState()
+  const [tempCar, setTempCar] = useState()
  
   useEffect((
   ) => {
@@ -368,7 +370,7 @@ const TransportationDetailsPage = (props) => {
               on: {
                 change(ss, value) {
                   console.log("smart select CHANGED: ",value)
-                  setCar(value)
+                  setTempCar(value)
                 },
                 close(ss) {
                   console.log("smart select event: ",ss)
@@ -393,7 +395,7 @@ const TransportationDetailsPage = (props) => {
               on: {
                 change(ss, value) {
                   console.log("smart select CHANGED: ",value)
-                  setDriver(value)
+                  setTempDriver(value)
                 },
                 close(ss) {
                   console.log("smart select event: ",ss)
@@ -406,10 +408,10 @@ const TransportationDetailsPage = (props) => {
                   {drivers.map((driver,id) => {return (<option key={id} value={driver.id}>{driver.fields.Name}</option>)})}
               </select>
             </ListItem>
-            {(car ||driver ) && <ListButton 
+            {(tempCar || tempDriver ) && <ListButton 
               key="saveButton"
               onClick={() => {
-                saveShuttle(tempPassagengers,car,driver,transportation.fields.Shuttle[0])
+                saveShuttle(tempPassagengers,tempCar,tempDriver,transportation.fields.Shuttle[0])
               }}>
               Save shuttle details
             </ListButton>}
