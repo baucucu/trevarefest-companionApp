@@ -7,12 +7,14 @@ dayjs.extend(utc)
 
 
 
-const TransportationPage = ({ f7router }) => {
+const TransportationPage = (props) => {
+
+  const {transportation, f7router, f7route} = props
   
   const [filters, setFilters] = useState({
     "Arrival": {
       value:false,
-      color: "lightblue",
+      color: "yellow",
       count: 0
     },
     "Departure": {
@@ -32,7 +34,6 @@ const TransportationPage = ({ f7router }) => {
     }
   })
 
-  const [transportation, setTransportation] = useState([])
 
   function changeFilters(filter) {
     // console.log("current filters: ", filters)
@@ -43,54 +44,18 @@ const TransportationPage = ({ f7router }) => {
     // console.log("new filters: ", filters)
   }
 
-  
 
-  function getTransportation() {
-    fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbleaxo1OqwVqJwBk",
-        {
-          method: 'GET', // *GET, POST, PUT, DELETE, etc.
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': 'Bearer keyYNFILTvHzPsq1B'
-          },
-        }
-      )
-        .then((res) => res.json())
-        .then((data) => {
-          setTransportation(data.records);
-          // console.log(data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-  }
 
   function refreshPage(done) {
-    getTransportation()
+    // getTransportation()
     done()
   }
-  
-  useEffect(() => {
-    getTransportation()
-  }, []);
 
-  useEffect(()=>{
-    console.log("transportation changed: ", transportation)
-    
-  }, [transportation])
 
   return (
     <Page ptr ptrMousewheel={true} onPtrRefresh={refreshPage}>
       <Navbar title="Transportation">
-        <NavRight>
-          <Link iconOnly panelOpen="right">
-            <Icon ios="f7:person_circle_fill" aurora="f7:person_circle_fill" md="material:person" >
-              <Badge color="blue">5</Badge>
-            </Icon>
-          </Link>
-        </NavRight>
       </Navbar>
-      <Navbar title={`${transportation?.fields?.Type} details`} backLink="Back" />
       < Toolbar bottom>
         <Button onClick={()=>{
           f7router.navigate('/transportation/request/')
@@ -116,7 +81,7 @@ const TransportationPage = ({ f7router }) => {
                   <ListItem
                     key={id}
                     style={{marginBottom:"4px", backgroundBlendMode:true}}
-                    link={"/transportation/"+item.id}
+                    link={`/transportation/${+item.id}`}
                     title={`${item.fields["Transportation"]}`}
                     badge="Add passengers"
                     badgeColor={filters[item.fields.Type].color}
@@ -125,7 +90,7 @@ const TransportationPage = ({ f7router }) => {
                     textColor={filters[item.fields.Type].color}
                   >
                     Passengers  
-                    <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Onboard" mediaBgColor="green" media={item?.fields["Passengers"]?.length} />
+                    {item.fields?.Passengers && <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Onboard" mediaBgColor="green" media={item.fields?.Passengers.length} />}
                   </ListItem>
                 )} else if (item.fields.Type === "Request") {
                   return (
@@ -141,7 +106,7 @@ const TransportationPage = ({ f7router }) => {
                       // subtitle={item.fields.Type}
                     >
                       Passengers  
-                      <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Requesting" mediaBgColor="red" media={item.fields["Passengers"].length} />
+                      {item.fields?.Passengers && <Chip style={{marginRight:"8px", marginLeft:"8px"}} text="Requesting" mediaBgColor="red" media={item.fields["Passengers"].length} />}
                     </ListItem>
                   )
                 } else {
@@ -158,9 +123,9 @@ const TransportationPage = ({ f7router }) => {
                       noChevron
                     >
                       Passengers  
-                      <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={item.fields["Passengers"].length} />
+                      {item.fields?.Passengers && <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={item.fields?.Passengers?.length} />}
                       <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(item.fields.withShuttle ? item.fields.withShuttle.length : 0)} />
-                      {item.fields["Shuttle passengers count"] !== item.fields["Passengers"].length && <Chip style={{marginRight:"8px"}} text="No shuttle" mediaBgColor="red" media={String(item.fields.withoutShuttle ? item.fields.withoutShuttle.length : 0)}/>}
+                      {item.fields["Shuttle passengers count"] !== item.fields?.Passengers?.length && <Chip style={{marginRight:"8px"}} text="No shuttle" mediaBgColor="red" media={String(item.fields.withoutShuttle ? item.fields.withoutShuttle.length : 0)}/>}
                     </ListItem>
                   )
                 }

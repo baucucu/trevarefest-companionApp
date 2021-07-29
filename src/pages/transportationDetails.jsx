@@ -6,27 +6,10 @@ var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
 dayjs.extend(utc)
 
-const TransportationDetailsPage = ({f7route, f7router}) => {
+const TransportationDetailsPage = (props) => {
 
-  function getTransportation(id) {
-    fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20Transportation/${id}`,
-      {
-        method: 'GET', // *GET, POST, PUT, DELETE, etc.
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': 'Bearer keyYNFILTvHzPsq1B'
-        },
-      }
-    )
-    .then((res) => res.json())
-    .then((data) => {
-      setTransportation(data);
-      console.log("retrieved transportation:",data);
-    })
-    .catch((error) => {
-      console.log(error);
-    });
-  }
+  const {transportation, f7route, f7router} = props
+
 
   function getPassenger(personId) {
     fetch(`https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbllZ7xwJ94GXrVsT/${personId}`,
@@ -143,22 +126,23 @@ const TransportationDetailsPage = ({f7route, f7router}) => {
     done();
   }
 
-  let [transportation, setTransportation] = useState()
   let [shuttles,setShuttles] = useState([])
   let [passengers,setPassengers] = useState([])
   let [people, setPeople] = useState([])
   let [tempPassagengers, setTempPassengers] = useState([])
   
-  useEffect(() => {
-    getTransportation(f7route.params.transportationId)
-  }, []);
+ 
+  useEffect((
+  ) => {
+    console.log("transportation: ", transportation)
+  },[])
 
   useEffect(()=>{
     getPeople()
   },[])
 
   useEffect(() => {
-    transportation?.fields.Passengers.map(passengerId => {
+    transportation?.fields?.Passengers.map(passengerId => {
       getPassenger(passengerId)
     })
   },[transportation])

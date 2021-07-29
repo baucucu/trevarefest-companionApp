@@ -1,82 +1,65 @@
-
-import HomePage from '../pages/home.jsx';
-import TransportationPage from '../pages/transportation.jsx'
+import NotFoundPage from '../pages/404.jsx';
+import TransportationPage from '../pages/transportation'
 import TransportationDetailsPage from '../pages/transportationDetails.jsx'
 import TransportationRequestPage from '../pages/transportationRequest.jsx'
 import TransportationPendingPage from '../pages/transportationPending.jsx'
-import PeoplePage from '../pages/people.jsx'
-import PersonPage from '../pages/person.jsx'
-import PassengerPage from '../pages/passenger.jsx'
-import ActivitiesPage from '../pages/activities.jsx'
-import AboutPage from '../pages/about.jsx';
-import FormPage from '../pages/form.jsx';
 
-import LeftPage1 from '../pages/left-page-1.jsx';
-import LeftPage2 from '../pages/left-page-2.jsx';
-import DynamicRoutePage from '../pages/dynamic-route.jsx';
-import RequestAndLoad from '../pages/request-and-load.jsx';
-import NotFoundPage from '../pages/404.jsx';
+var _ = require('lodash');
+var dayjs = require('dayjs')
+var utc = require('dayjs/plugin/utc')
+var timezone = require('dayjs/plugin/timezone') // dependent on utc plugin
+dayjs.extend(utc)
+dayjs.extend(timezone)
+
+const axios = require('axios');
 
 var routes = [
+    {
+        path: '/transportation/:transportationId',
+        async: function ({ router, to, resolve }) {
+          // App instance
+          var app = router.app;
+    
+          // Show Preloader
+          app.preloader.show();
+          
+          console.log("transportation details router: ", to.params)
+          const transportationId = to.params.transportationId
+    
+          function getTransportation(transportationId) {
+            return axios({
+              url: `https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbleaxo1OqwVqJwBk/${transportationId}`,
+              method: 'get',
+              headers: {
+                "Authorization": "Bearer keyYNFILTvHzPsq1B"
+              }
+            })
+          }
+    
+          Promise.all([getTransportation(transportationId)])
+          .then(response => {
+            console.log("preloading data: ",response)
+            
+            app.preloader.hide();
+            // Resolve route to load page
+            resolve(
+              {
+                component: TransportationDetailsPage,
+              },
+              {
+                props: {
+                  transportation: response[0].data,
+                }
+              }
+            );
+          })
+          .catch(err => {
+            console.log(err)
+          })
+        },
+    },
   {
     path: '/',
-    component: HomePage,
-  },
-  {
-    path: '/transportation/',
-    component: TransportationPage,
-  },
-  {
-    path: '/transportation/pending',
-    component: TransportationPendingPage,
-  },
-  {
-    path: '/transportation/request',
-    component: TransportationRequestPage,
-  },
-  {
-    path: '/transportation/:transportationId',
-    component: TransportationDetailsPage,
-  },
-  {
-    path: '/people/',
-    component: PeoplePage,
-  },
-  {
-    path: '/people/:personId',
-    component: PersonPage,
-  },
-  {
-    path: '/passenger/',
-    component: PassengerPage,
-  },
-  {
-    path: '/activities/',
-    component: ActivitiesPage,
-  },
-  {
-    path: '/about/',
-    component: AboutPage,
-  },
-  {
-    path: '/form/',
-    component: FormPage,
-  },
-
-  {
-    path: '/left-page-1/',
-    component: LeftPage1,
-  },
-  {
-    path: '/left-page-2/',
-    component: LeftPage2,
-  },
-  {
-    path: '/dynamic-route/blog/:blogId/post/:postId/',
-    component: DynamicRoutePage,
-  },
-  {
-    path: '/request-and-load/user/:userId/',
     async: function ({ router, to, resolve }) {
       // App instance
       var app = router.app;
@@ -85,41 +68,39 @@ var routes = [
       app.preloader.show();
 
       // User ID from request
-      var userId = to.params.userId;
+      
+    //   var userId = to.query.userId;
 
-      // Simulate Ajax Request
-      setTimeout(function () {
-        // We got user data from request
-        var user = {
-          firstName: 'Vladimir',
-          lastName: 'Kharlampidi',
-          about: 'Hello, i am creator of Framework7! Hope you like it!',
-          links: [
-            {
-              title: 'Framework7 Website',
-              url: 'http://framework7.io',
-            },
-            {
-              title: 'Framework7 Forum',
-              url: 'http://forum.framework7.io',
-            },
-          ]
-        };
-        // Hide Preloader
+      function getTransportation() {
+        return axios({
+          url: `https://api.airtable.com/v0/appw2hvpKRTQCbB4O/tbleaxo1OqwVqJwBk`,
+          method: 'get',
+          headers: {
+            "Authorization": "Bearer keyYNFILTvHzPsq1B"
+          }
+        })
+      }
+
+      Promise.all([getTransportation()])
+      .then(response => {
+        console.log("preloading data: ",response)
+        
         app.preloader.hide();
-
         // Resolve route to load page
         resolve(
           {
-            component: RequestAndLoad,
+            component: TransportationPage,
           },
           {
             props: {
-              user: user,
+              transportation: response[0].data.records,
             }
           }
         );
-      }, 1000);
+      })
+      .catch(err => {
+        console.log(err)
+      })
     },
   },
   {
