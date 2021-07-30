@@ -27,7 +27,7 @@ const TransportationPage = (props) => {
       color: "green", 
       count:0
     },
-    "Request": {
+    "Shuttle Request": {
       value:false,
       color: "red",
       count: 0
@@ -59,7 +59,7 @@ const TransportationPage = (props) => {
       < Toolbar bottom>
         <Button onClick={()=>{
           f7router.navigate('/transportation/request/')
-        }}>Request a new shuttle for this flight</Button>
+        }}>Create a new shuttle</Button>
       </Toolbar>
         <BlockTitle>Filters</BlockTitle>
         <Block strong>

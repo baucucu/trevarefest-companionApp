@@ -138,6 +138,7 @@ const TransportationDetailsPage = (props) => {
           console.log(error);
         });
   }
+
   function getCars() {
     fetch("https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20Cars?view=Grid%20view",
         {
@@ -156,6 +157,35 @@ const TransportationDetailsPage = (props) => {
         .catch((error) => {
           console.log(error);
         });
+  }
+
+  function convertRequestToShuttle(recordId) {
+    let data = {"records" : [
+      {
+        "id": recordId,
+        "fields": {
+          "Type": "Shuttle"
+        }
+      }
+    ]}
+    console.log("will save shuttle data: ", data)
+
+    axios({
+      url: "https://api.airtable.com/v0/appw2hvpKRTQCbB4O/Directory%3A%20Transportation",
+      method: 'PATCH', // *GET, POST, PUT, DELETE, etc.
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': 'Bearer keyYNFILTvHzPsq1B'
+      },
+      data : data
+    })
+      .then((response) => {
+        console.log("shuttle saved: ",response.data)
+        f7router.navigate("/")  
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   }
 
   function refreshPage(done) {
@@ -192,7 +222,7 @@ const TransportationDetailsPage = (props) => {
   },[])
 
   useEffect(() => {
-    transportation?.fields?.Passengers.map(passengerId => {
+    transportation?.fields?.Passengers && transportation?.fields?.Passengers.map(passengerId => {
       getPassenger(passengerId)
     })
   },[transportation])
@@ -248,20 +278,25 @@ const TransportationDetailsPage = (props) => {
               transportation: transportation
             }
           })
-        }}>Request a new shuttle for this flight</Button>
+        }}>Create a new shuttle for this flight</Button>
       </Toolbar>}
       <BlockHeader >{transportation?.fields.Transportation}</BlockHeader>
-      {["Shuttle","Request"].includes(transportation?.fields?.Type) || <Block>
+
+      {["Shuttle", "Request"].includes(transportation?.fields?.Type) || <Block>
         <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={transportation?.fields["Passengers"].length} />
         {/* <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(transportation?.fields["Shuttle passengers count"])} /> */}
         <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(transportation?.fields.withShuttle ? transportation.fields.withShuttle.length : 0)} />
         {transportation?.fields["Shuttle passengers count"] !== transportation?.fields["Passengers"].length && <Chip style={{marginRight:"8px"}} text="No shuttle" mediaBgColor="red" media={String(transportation?.fields.withoutShuttle ? transportation?.fields.withoutShuttle.length : 0)}/>}      </Block>}
       {/* <BlockTitle>Passenger list</BlockTitle> */}
+      
+      
       <List mediaList  >
         <ListGroup key="passengersList">
-          <ListItem key="title1" title={transportation?.fields.Type === "Shuttle" ? "Shuttle passengers" : "Flight passengers"} groupTitle></ListItem>
-        
-        {transportation && passengers.map((passenger,id) => {
+          <ListItem key="title1" title={transportation?.fields.Type === "Shuttle" ? "Shuttle passengers" : "Passengers"} groupTitle></ListItem>
+
+        {/* Passenger list */}
+
+        {passengers.length > 0 && passengers.map((passenger,id) => {
           return (
             <ListItem
               key={id}
@@ -281,7 +316,10 @@ const TransportationDetailsPage = (props) => {
           )
         })}
         </ListGroup >
-        {["Shuttle"].includes(transportation?.fields?.Type) || <ListGroup key="shuttlesList">
+
+        {/* Connected shuttles */}
+
+        {["Shuttle", "Request"].includes(transportation?.fields?.Type) || <ListGroup key="shuttlesList">
           <ListItem title="Connected shuttles" groupTitle></ListItem>
           {shuttles.map((shuttle,id)=> {
             return(
@@ -321,7 +359,10 @@ const TransportationDetailsPage = (props) => {
           })}
           
         </ListGroup>}
-        {transportation?.fields?.Type === "Shuttle" && <ListGroup key="shuttlesSS">
+        
+        {/* Shuttle passengers */}
+        
+        {transportation?.fields?.Type === "Shuttle" && <ListGroup>
           <ListItem title="Add passengers to shuttle" key="title3" groupTitle></ListItem>
           <ListItem
             // key="smartSelect"
@@ -357,6 +398,8 @@ const TransportationDetailsPage = (props) => {
               </ListButton>
             }
         </ListGroup>}
+        
+        {/* Shuttle Driver & Car */}
         {transportation.fields.Type === "Shuttle" && <ListGroup>
           <ListItem groupTitle>Car & Driver</ListItem>
           <ListItem
@@ -416,6 +459,8 @@ const TransportationDetailsPage = (props) => {
               Save shuttle details
             </ListButton>}
         </ListGroup>}
+        
+        {transportation.fields.Type === "Shuttle Request" && <ListButton onClick={() => convertRequestToShuttle(transportation.id)}>Approve shuttle request</ListButton>}
       </List>
     </Page>
   );

@@ -14,7 +14,7 @@ const TransportationRequestPage = (props) => {
   let [request, setRequest] = useState({
     From: props?.transportation && props.transportation.fields.Type === "Arrival" ? props.transportation.fields.To : null,
     To: props?.transportation && props.transportation.fields.Type === "Departure" && props.transportation.fields.From,
-    Time: props?.transportation ? props.transportation.fields.Time : null,
+    Time: props?.transportation ? props.transportation.fields.Time : dayjs(new Date(2021,8,1)),
     Passengers: []
   })
   let [people, setPeople] = useState([])
@@ -65,23 +65,23 @@ const TransportationRequestPage = (props) => {
             placeholder="Please choose..."
             onCalendarChange={(e)=>{
               if(e) {
-                console.log("time: ",e)
+                console.log("time: ",e[0])
                 let tempRequest = request
                 tempRequest["Time"] = e[0]
                 setRequest(tempRequest)
               }
             }}
             calendarParams={{
-              minDate:"2021-07-31",
-              maxDate:"2021-08-06",
-              yearSelector: false,
+              // minDate: dayjs().year(2021).month(7).day(31),
+              // maxDate: dayjs().year(2021).month(8).day(6),
+              yearSelector: true,
               timePicker: true,
               dateFormat:"d M HH::mm",
-              events: [{
-                from: new Date("2021-07-31"),
-                to: new Date("2021-08-06"),
-                color: "#4caf50"
-              }],
+              // events: [{
+              //   from: dayjs().year(2021).month(7).day(31),
+              //   to: dayjs().year(2021).month(8).day(6),
+              //   color: "#4caf50"
+              // }],
             }}
           >
           </ListInput>
@@ -89,7 +89,7 @@ const TransportationRequestPage = (props) => {
           <ListInput
             label="Location"
             type="select"
-            value={request.From}
+            value={request.From || "-"}
             placeholder="Please choose..."
             onChange={(e)=>{
               console.log("From changed: ", e.target.value)
@@ -111,7 +111,7 @@ const TransportationRequestPage = (props) => {
           <ListInput
             label="Location"
             type="select"
-            value={request.To}
+            value={request.To || "-"}
             placeholder="Please choose..."
             // errorMessage="Please enter the destination"
             onChange={(e)=>{
