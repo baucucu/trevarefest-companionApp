@@ -280,9 +280,11 @@ const TransportationDetailsPage = (props) => {
           })
         }}>Create a new shuttle for this flight</Button>
       </Toolbar>}
-      <BlockHeader >{transportation?.fields.Transportation}</BlockHeader>
+      <Block >{transportation?.fields.Transportation}</Block>
+      {car && <Block>Car: {transportation?.fields?.["Car Licence #"]}</Block>}
+      {driver && <Block>Driver: {transportation?.fields?.["Driver Name"]}</Block>}
 
-      {["Shuttle", "Request"].includes(transportation?.fields?.Type) || <Block>
+      {["Shuttle", "Shuttle Request"].includes(transportation?.fields?.Type) || <Block>
         <Chip style={{marginRight:"8px" , marginLeft:"8px"}} iconSize="4px" text="Onboard" mediaBgColor="blue" media={transportation?.fields["Passengers"].length} />
         {/* <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(transportation?.fields["Shuttle passengers count"])} /> */}
         <Chip style={{marginRight:"8px"}} text="With shuttle" mediaBgColor="green" media={String(transportation?.fields.withShuttle ? transportation.fields.withShuttle.length : 0)} />
@@ -305,8 +307,8 @@ const TransportationDetailsPage = (props) => {
               noChevron
               swipeout
             >
-              {["Shuttle","Request"].includes(transportation?.fields?.Type) || hasShuttle(passenger.id, transportation) && <Icon slot="media" size="large" material="checkmark_circle_fill" ios="checkmark_circle_fill" f7="checkmark_circle_fill" color="green"></Icon>}
-              {["Shuttle","Request"].includes(transportation?.fields?.Type) || hasShuttle(passenger.id, transportation) || <Icon slot="media" size="large" material="exclamationmark_circle_fill" ios="exclamationmark_circle_fill" f7="exclamationmark_circle_fill" color="red"></Icon>}
+              {["Shuttle","Shuttle Request"].includes(transportation?.fields?.Type) || hasShuttle(passenger.id, transportation) && <Icon slot="media" size="large" material="checkmark_circle_fill" ios="checkmark_circle_fill" f7="checkmark_circle_fill" color="green"></Icon>}
+              {["Shuttle","Shuttle Request"].includes(transportation?.fields?.Type) || hasShuttle(passenger.id, transportation) || <Icon slot="media" size="large" material="exclamationmark_circle_fill" ios="exclamationmark_circle_fill" f7="exclamationmark_circle_fill" color="red"></Icon>}
               <SwipeoutActions right>
                 <SwipeoutButton delete confirmText="Are you sure you want to delete this item?">
                   Delete
@@ -319,7 +321,7 @@ const TransportationDetailsPage = (props) => {
 
         {/* Connected shuttles */}
 
-        {["Shuttle", "Request"].includes(transportation?.fields?.Type) || <ListGroup key="shuttlesList">
+        {["Shuttle", "Shuttle Request"].includes(transportation?.fields?.Type) || <ListGroup key="shuttlesList">
           <ListItem title="Connected shuttles" groupTitle></ListItem>
           {shuttles.map((shuttle,id)=> {
             return(
