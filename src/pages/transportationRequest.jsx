@@ -4,9 +4,11 @@ import axios from 'axios';
 
 var dayjs = require('dayjs')
 var utc = require('dayjs/plugin/utc')
+var timezone = require('dayjs/plugin/timezone')
 var isBetween = require('dayjs/plugin/isBetween')
 dayjs.extend(utc)
 dayjs.extend(isBetween)
+dayjs.extend(timezone)
 
 
 const TransportationRequestPage = (props) => {
@@ -14,7 +16,7 @@ const TransportationRequestPage = (props) => {
   let [request, setRequest] = useState({
     From: props?.transportation && props.transportation.fields.Type === "Arrival" ? props.transportation.fields.To : null,
     To: props?.transportation && props.transportation.fields.Type === "Departure" && props.transportation.fields.From,
-    Time: props?.transportation ? props.transportation.fields.Time : dayjs(new Date(2021,8,1)),
+    Time: props?.transportation ? props.transportation.fields.Time : dayjs(new Date()),
     Passengers: []
   })
   let [people, setPeople] = useState([])
@@ -65,9 +67,10 @@ const TransportationRequestPage = (props) => {
             placeholder="Please choose..."
             onCalendarChange={(e)=>{
               if(e) {
-                console.log("time: ",e[0])
+                const localTime = dayjs(e[0]).add(-2,"hours").format('YYYY/MM/DD HH:mm')
+                console.log("time: ",localTime)
                 let tempRequest = request
-                tempRequest["Time"] = e[0]
+                tempRequest["Time"] = new Date(localTime)
                 setRequest(tempRequest)
               }
             }}
